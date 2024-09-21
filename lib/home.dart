@@ -298,7 +298,10 @@ class HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     List<Widget> screens = [];
 
+    var screenHeight = MediaQuery.of(context).size.height;
+    var screenWidth = MediaQuery.of(context).size.width;
     final Size size = MediaQuery.of(context).size;
+
     String path = "assets/Icons/addicon.svg";
     String path1 = "assets/Icons/backIcon.svg";
 
@@ -493,7 +496,7 @@ class HomePageState extends State<HomePage> {
                         for (int index = 0; index < items.length; index++)
                           InkWell(
                             onDoubleTap: () {
-                              deleteItem(index);
+                              // deleteItem(index);
                             },
                             onTap: () => _onMenuItemTap(index),
                             child: AnimatedContainer(
@@ -515,7 +518,7 @@ class HomePageState extends State<HomePage> {
                                     ? 0
                                     : 8, // Right margin 0 for selected index
                               ),
-                              height: 118,
+                              height: screenHeight / 4.5,
                               decoration: BoxDecoration(
                                 color: selectedIndex1 == index
                                     ? homeScreenContainerColor
@@ -523,7 +526,7 @@ class HomePageState extends State<HomePage> {
                                 borderRadius: BorderRadius.circular(8),
                               ),
                               child: Container(
-                                margin: const EdgeInsets.only(top: 10),
+                                margin: const EdgeInsets.only(top: 20),
                                 child: Column(
                                   children: [
                                     Center(
@@ -927,13 +930,6 @@ class HomePageState extends State<HomePage> {
                         ),
                       ]),
                   SizedBox(height: screenHeight * 0.09),
-                  // BottomGestureButton(
-                  //      popup:popup,
-                  //   addDatum: addDatumFunction,
-                  //   textColor: Colors.white,
-                  //   text: text == false ? "UPDATE" : "ADD",
-                  //   color: floatingButtonColor,
-                  // ),
                   GestureDetector(
                     onTap: () =>
                         text == false ? editUpdate(index) : addDatumFunction(),
@@ -1066,6 +1062,22 @@ class HomePageState extends State<HomePage> {
                       ),
                     ],
                   ),
+                ),
+              ),
+              Container(
+                // color: appBackGroundColor,
+                // margin: EdgeInsets.only(
+                //     left: screenWidth / 1.5, top: screenHeight / 7.95),
+                child: IconButton(
+                  icon: SvgPicture.asset(
+                    'assets/Icons/cross.svg', // Update this path to your SVG file
+                    // width: 25,
+                    // height: 25,
+                    color: Colors.black, // You can change the color if needed
+                  ),
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
                 ),
               ),
             ],

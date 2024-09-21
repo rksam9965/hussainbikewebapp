@@ -1,8 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:hussainbikewebapp/signature.dart';
 import 'package:hussainbikewebapp/utils/colors.dart';
 import 'package:hussainbikewebapp/widget/date_picker.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:signature/signature.dart';
 
 import 'Textfield.dart';
 import 'datamodule/dummyData.dart';
@@ -31,12 +33,24 @@ class _WorkshopscreenState extends State<Workshopscreen> {
   List<DropdownMenuItem<String>> partsList = [];
   var selectParts = '';
   bool kk = false;
+  late SignatureController _controller;
 
   @override
   void initState() {
     technicianListFunction();
     partsListFunction();
+    _controller = SignatureController(
+      penStrokeWidth: 1,
+      penColor: Colors.black,
+      exportBackgroundColor: Colors.white,
+    );
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
   }
 
   technicianListFunction() {
@@ -144,6 +158,106 @@ class _WorkshopscreenState extends State<Workshopscreen> {
   List<Item1> items = [
     Item1(code: "65", printName: "track", qty: "5", price: "6763")
   ];
+
+  signaturePopUp(BuildContext context) {
+    var screenWidth = MediaQuery.of(context).size.width;
+    var screenHeight = MediaQuery.of(context).size.height;
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return Theme(
+          data: Theme.of(context).copyWith(dialogBackgroundColor: Colors.white),
+          child: Stack(
+            children: [
+              AlertDialog(
+                backgroundColor: appBackGroundColor,
+                surfaceTintColor: Colors.transparent,
+                shape: const RoundedRectangleBorder(
+                  borderRadius: BorderRadius.all(Radius.circular(8.0)),
+                ),
+                title: Center(
+                  child: Text(
+                    "Please enter signature to complete",
+                    style: TextStyle(
+                        color: floatingButtonColor,
+                        fontSize: 14,
+                        fontWeight: FontWeight.bold),
+                  ),
+                ),
+                content: SingleChildScrollView(
+                  child: Column(
+                    children: [
+                      Stack(
+                        children: [
+                          Signature(
+                            controller: _controller,
+                            height: 200,
+                            width: screenWidth / 4,
+                            backgroundColor: Colors.white,
+                          ),
+                          Align(
+                            alignment: Alignment.centerRight,
+                            child: IconButton(
+                              icon: Icon(
+                                color: Colors.black,
+                                Icons.close,
+                                size: 20,
+                              ),
+                              onPressed: () {
+                                setState(() {
+                                  _controller.clear();
+                                });
+                              },
+                            ),
+                          ),
+                        ],
+                      ),
+                      SizedBox(height: 10),
+                      GestureDetector(
+                        onTap: () => {Navigator.pop(context)},
+                        child: Container(
+                            height: screenHeight * 0.08,
+                            width: screenWidth / 4,
+                            decoration: BoxDecoration(
+                              border: Border.all(
+                                color:
+                                    floatingButtonColor, // Set your desired border color here
+                                width: 1, // Set the width of the border
+                              ),
+                              color: floatingButtonColor,
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            child: Center(
+                                child: Text(
+                              "SAVE",
+                              style: TextStyle(color: Colors.white),
+                            ))),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              Container(
+                margin: EdgeInsets.only(
+                    left: screenWidth / 1.6, top: screenHeight / 5.5),
+                child: IconButton(
+                  icon: SvgPicture.asset(
+                    'assets/Icons/cross.svg', // Update this path to your SVG file
+                    width: 25,
+                    height: 25,
+                    color: Colors.black, // You can change the color if needed
+                  ),
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                ),
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
 
   addDataWorkshop() {
     setState(() {
@@ -843,8 +957,7 @@ class _WorkshopscreenState extends State<Workshopscreen> {
                 ),
                 GestureDetector(
                   onTap: () {
-                    // Action when button is tapped
-                    print("Button tapped");
+                    signaturePopUp(context);
                   },
                   child: Container(
                     margin: EdgeInsets.only(
