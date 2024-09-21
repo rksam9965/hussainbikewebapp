@@ -13,7 +13,7 @@ class CustomerScreen1 extends StatefulWidget {
   int? selectedIndex;
   int? passingIndex;
   String? salesman;
-  Function(BuildContext context, bool? text,int? index)? showPopup;
+  Function(BuildContext context, bool? text, int? index)? showPopup;
   int? index;
   List<Item>? items;
 
@@ -28,10 +28,10 @@ class CustomerScreen1 extends StatefulWidget {
       this.index});
 
   @override
-  State<CustomerScreen1> createState() => _CustomerScreen1State();
+  State<CustomerScreen1> createState() => CustomerScreen1State();
 }
 
-class _CustomerScreen1State extends State<CustomerScreen1> {
+class CustomerScreen1State extends State<CustomerScreen1> {
   final TextEditingController salesman = TextEditingController();
   final TextEditingController phoneCode = TextEditingController();
   final TextEditingController customer = TextEditingController();
@@ -45,12 +45,11 @@ class _CustomerScreen1State extends State<CustomerScreen1> {
   final TextEditingController estimateCharges = TextEditingController();
   final TextEditingController outstanding = TextEditingController();
   final TextEditingController address = TextEditingController();
-  final textFieldsDate1 = GlobalKey<DatePickerExampleState>();
-  final textFieldsDate2 = GlobalKey<DatePickerExampleState>();
+  final receivedate = GlobalKey<DatePickerExampleState>();
+  final deliverydate = GlobalKey<DatePickerExampleState>();
 
   bool? display = true;
   bool? disable = true;
-
 
   @override
   void initState() {
@@ -68,6 +67,14 @@ class _CustomerScreen1State extends State<CustomerScreen1> {
     outstanding.text = widget.items![widget.index!].outstanding.toString();
     address.text = widget.items![widget.index!].address.toString();
     super.initState();
+  }
+
+
+  edit(){
+    setState(() {
+      widget.items![widget.index!].salesman = "horlic";
+    });
+     // Navigator.pop(context);
   }
 
   @override
@@ -106,7 +113,8 @@ class _CustomerScreen1State extends State<CustomerScreen1> {
                             : true,
                     child: GestureDetector(
                       onTap: () {
-                        widget.showPopup!(context,false,widget.index);
+                        edit();
+                        // widget.showPopup!(context, false, widget.index);
                       },
                       child: Container(
                         margin: EdgeInsets.only(
@@ -134,7 +142,7 @@ class _CustomerScreen1State extends State<CustomerScreen1> {
                 width: screenWidth / 3.045,
                 child: DatePickerExample(
                   disable: disable,
-                  key: textFieldsDate1,
+                  key: receivedate,
                   label: "Receive Date",
                   text: receiveDate.text.toString(),
                 ),
@@ -143,7 +151,7 @@ class _CustomerScreen1State extends State<CustomerScreen1> {
                 width: screenWidth / 3.045,
                 child: DatePickerExample(
                   disable: disable,
-                  key: textFieldsDate2,
+                  key: deliverydate,
                   label: "Delivery Date",
                   text: driverDate.text.toString(),
                 ),

@@ -6,7 +6,7 @@ import 'package:hussainbikewebapp/widget/date_picker.dart';
 import 'package:hussainbikewebapp/widget/gesturebutton.dart';
 import 'package:flutter_svg/svg.dart';
 import 'Textfield.dart';
-import 'customer_screen1.dart';
+import 'side_screen.dart';
 import 'datamodule/dummyData.dart';
 
 class HomePage extends StatefulWidget {
@@ -38,6 +38,7 @@ class HomePageState extends State<HomePage> {
   final TextEditingController address1 = TextEditingController();
   final textFieldsDate1 = GlobalKey<DatePickerExampleState>();
   final textFieldsDate2 = GlobalKey<DatePickerExampleState>();
+
 
   int selectedIndex = 0; // Track the selected screen index
   int selectedIndex1 = 0;
@@ -155,7 +156,7 @@ class HomePageState extends State<HomePage> {
             style: TextStyle(
                 color: Colors.grey,
                 fontWeight: FontWeight.w300,
-                fontSize: 14 // Color of the label text
+                fontSize: 12 // Color of the label text
                 ),
           ),
         ),
@@ -170,7 +171,7 @@ class HomePageState extends State<HomePage> {
             style: TextStyle(
                 color: Colors.grey,
                 fontWeight: FontWeight.w300,
-                fontSize: 14 // Color of the label text
+                fontSize: 12 // Color of the label text
                 ),
           ),
         ),
@@ -185,7 +186,7 @@ class HomePageState extends State<HomePage> {
             style: TextStyle(
                 color: Colors.grey,
                 fontWeight: FontWeight.w300,
-                fontSize: 14 // Color of the label text
+                fontSize: 12 // Color of the label text
                 ),
           ),
         ),
@@ -203,7 +204,7 @@ class HomePageState extends State<HomePage> {
             style: TextStyle(
                 color: Colors.grey,
                 fontWeight: FontWeight.w300,
-                fontSize: 14 // Color of the label text
+                fontSize: 12 // Color of the label text
                 ),
           ),
         ),
@@ -218,7 +219,7 @@ class HomePageState extends State<HomePage> {
             style: TextStyle(
                 color: Colors.grey,
                 fontWeight: FontWeight.w300,
-                fontSize: 14 // Color of the label text
+                fontSize: 12 // Color of the label text
                 ),
           ),
         ),
@@ -227,14 +228,17 @@ class HomePageState extends State<HomePage> {
     bikeList.add(
       DropdownMenuItem(
         value: "2",
-        child: Center(
-          child: Text(
-            "345",
-            style: TextStyle(
-                color: Colors.grey,
-                fontWeight: FontWeight.w300,
-                fontSize: 14 // Color of the label text
-                ),
+        child: Container(
+          // height: 30,
+          child: Center(
+            child: Text(
+              "345",
+              style: TextStyle(
+                  color: Colors.grey,
+                  fontWeight: FontWeight.w300,
+                  fontSize: 12 // Color of the label text
+                  ),
+            ),
           ),
         ),
       ),
@@ -560,6 +564,7 @@ class HomePageState extends State<HomePage> {
                       children: [
                         for (int i = 0; i < items.length; i++)
                           CustomerScreen1(
+                              // selectedIndex1:selectedIndex1
                               showPopup: showPopup,
                               items: items,
                               index: i,
@@ -687,7 +692,7 @@ class HomePageState extends State<HomePage> {
     final Size size = MediaQuery.of(context).size;
     var screenWidth = MediaQuery.of(context).size.width;
     var screenHeight = MediaQuery.of(context).size.height;
-    bool? popup = true;
+    bool? popup1 = true;
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -700,98 +705,104 @@ class HomePageState extends State<HomePage> {
               borderRadius: BorderRadius.all(Radius.circular(8.0)),
             ),
             content: SingleChildScrollView(
-              child: Column(
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Container(
-                          margin: EdgeInsets.only(left: screenWidth * 0.28),
-                          child: Text(
-                            text == false ? "EDIT JOB ORDER" : 'NEW JOB ORDER',
-                            style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                                color: Colors.black),
-                          )),
-                    ],
-                  ),
-                  SizedBox(height: screenHeight * 0.05),
-                  const SizedBox(height: 16),
-                  TextFieldFunction("Salesman", salesman),
-                  SizedBox(height: screenHeight * 0.015),
-                  TextFieldFunction("Phone Code", phoneCode),
-                  SizedBox(height: screenHeight * 0.015),
-                  Row(
+              child: Container(
+                // width: screenWidth/52,
+                // height: screenHeight/2,
+                child: Column(
+                  children: [
+                    Center(
+                      child: Text(
+                        text == false ? "EDIT JOB ORDER" : 'NEW JOB ORDER',
+                        style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            color: Colors.black),
+                      ),
+                    ),
+                    SizedBox(height: screenHeight * 0.02),
+                    SizedBox(
+                        width: screenWidth / 2.5,
+                        height: screenHeight/18,
+                        child: TextFieldFunction("Salesman", salesman)
+                    ),
+                    SizedBox(height: 5,),
+                    SizedBox(
+                        width: screenWidth / 2.5,
+                        height: screenHeight/18,
+                        child: TextFieldFunction("Phone Code", phoneCode)
+                    ),
+                    SizedBox(height: 5,),
+                    Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          SizedBox(
+                            height: screenHeight/18,
+                            width: (screenWidth / 2.5)/2.05,
+                            child: DatePickerExample(
+                                label: "Receive Date", key: textFieldsDate2),
+                          ),
+                          SizedBox(
+                            height: screenHeight/18,
+                            width: (screenWidth / 2.5)/2.05,
+                            child: DatePickerExample(
+                                label: "Deliver Date", key: textFieldsDate1),
+                          ),
+                        ]),
+                    SizedBox(height: 5,),
+                    Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        SizedBox(
-                          width: screenWidth / 2.95,
-                          child: DatePickerExample(
-                              label: "Receive Date", key: textFieldsDate2),
-                        ),
-                        SizedBox(
-                          width: screenWidth / 2.95,
-                          child: DatePickerExample(
-                              label: "Deliver Date", key: textFieldsDate1),
-                        ),
-                      ]),
-                  SizedBox(height: screenHeight * 0.015),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Container(
-                        height: screenHeight * 0.082,
-                        width: screenWidth / 1.58,
-                        margin: EdgeInsets.only(top: 6, left: 0),
-                        decoration: BoxDecoration(
-                          color: Colors
-                              .transparent, // Set your desired background color here
-                          border: Border.all(
-                              color: textBorderColor, width: 1), // Border color
-                          borderRadius:
-                              BorderRadius.circular(5), // Rounded corners
-                        ),
-                        child: DropdownButtonFormField<String>(
-                          decoration: const InputDecoration(
-                            border: InputBorder.none,
-                            hintText: "Select",
-                            contentPadding:
-                                EdgeInsets.symmetric(horizontal: 25),
-                          ),
-                          focusColor: Colors.transparent,
-                          value: selectCustomer,
-                          dropdownColor: Colors.white,
-                          items: customerList,
-                          onSaved: (String? itemChosen) {
-                            setState(() {
-                              selectCustomer = itemChosen!;
-                            });
-                          },
-                          onChanged: (String? value) {
-                            setState(() {
-                              selectCustomer = value!;
-                            });
-                          },
-                        ),
-                      ),
-                      GestureDetector(
-                        onTap: () {},
-                        child: Container(
-                          margin: EdgeInsets.only(top: 6, left: 0),
-                          width: 50.0, // Width of the square
-                          height: 50.0, // Height of the square
+                        Container(
+                          height: screenHeight/18,
+                          // width: screenWidth / 2.5,
+
+                          width: (screenWidth / 2.5)/1.11,
                           decoration: BoxDecoration(
-                            border: Border.all(color: borderColor, width: 1),
+
                             color: Colors
-                                .transparent, // Background color// Border color
-                            borderRadius: BorderRadius.circular(
-                                8), // Optional: Rounded corners
+                                .transparent, // Set your desired background color here
+                            border: Border.all(
+                                color: textBorderColor, width: 1), // Border color
+                            borderRadius:
+                                BorderRadius.circular(5), // Rounded corners
                           ),
-                          child: Center(
-                            child: InkWell(
-                              onTap: () {
-                                nextPopup(context);
-                              },
+                          child: DropdownButtonFormField<String>(
+                            decoration: const InputDecoration(
+                              border: InputBorder.none,
+                              hintText: "Select",
+
+                              contentPadding: EdgeInsets.only(bottom: 16,left: 23,right: 10),
+                            ),
+                            focusColor: Colors.transparent,
+                            value: selectCustomer,
+                            dropdownColor: Colors.white,
+                            items: customerList,
+                            onSaved: (String? itemChosen) {
+                              setState(() {
+                                selectCustomer = itemChosen!;
+                              });
+                            },
+                            onChanged: (String? value) {
+                              setState(() {
+                                selectCustomer = value!;
+                              });
+                            },
+                          ),
+                        ),
+                        GestureDetector(
+                          onTap: () {
+                            nextPopup(context);
+                          },
+                          child: Container(
+                            height: screenHeight/18,
+                            width: 50,
+                            decoration: BoxDecoration(
+                              border: Border.all(color: textBorderColor, width: 1),
+                              color: Colors
+                                  .transparent, // Background color// Border color
+                              borderRadius: BorderRadius.circular(
+                                  8), // Optional: Rounded corners
+                            ),
+                            child: Center(
                               child: Container(
                                 width: 20.0, // Width of the square
                                 height: 20.0,
@@ -804,156 +815,171 @@ class HomePageState extends State<HomePage> {
                               ),
                             ),
                           ),
-                        ),
-                      )
-                    ],
-                  ),
-                  SizedBox(height: screenHeight * 0.015),
-                  TextFieldFunction("Mobile Number", mobileNumber),
-                  SizedBox(height: screenHeight * 0.015),
-                  TextFieldFunction("Driver Details", driverDetails),
-                  SizedBox(height: screenHeight * 0.015),
-                  Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Container(
-                          height: screenHeight * 0.082,
-                          width: screenWidth / 2.95,
-                          margin: EdgeInsets.only(top: 2, left: 0),
-                          decoration: BoxDecoration(
-                            color: Colors
-                                .transparent, // Set your desired background color here
-                            border: Border.all(
-                                color: textBorderColor,
-                                width: 1), // Border color
-                            borderRadius:
-                                BorderRadius.circular(5), // Rounded corners
-                          ),
-                          child: DropdownButtonFormField<String>(
-                            decoration: const InputDecoration(
-                              border: InputBorder.none,
-                              hintText: "Select",
-                              contentPadding:
-                                  EdgeInsets.symmetric(horizontal: 25),
-                            ),
-                            focusColor: Colors.transparent,
-                            value: selectBikeList,
-                            dropdownColor: Colors.white,
-                            items: bikeList,
-                            onSaved: (String? itemChosen) {
-                              setState(() {
-                                selectBikeList = itemChosen!;
-                              });
-                            },
-                            onChanged: (String? value) {
-                              setState(() {
-                                selectBikeList = value!;
-                              });
-                            },
-                          ),
-                        ),
-                        GestureDetector(
-                          onTap: () {},
-                          child: Container(
-                            margin: EdgeInsets.only(top: 2, left: 0),
-                            height: screenHeight * 0.082,
-                            width: screenWidth / 2.95,
+                        )
+                      ],
+                    ),
+                    SizedBox(height: 5,),
+                    SizedBox(
+                        width: screenWidth / 2.5,
+                        height: screenHeight/18,
+                        child: TextFieldFunction("Mobile Number", mobileNumber)),
+                    SizedBox(height: 5,),
+                    SizedBox(
+                        width: screenWidth / 2.5,
+                        height: screenHeight/18,
+                        child: TextFieldFunction("Driver Details", driverDetails)),
+                    SizedBox(height: 5),
+                    Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Container(
+                            // padding: EdgeInsets.symmetric(horizontal: 10,vertical: 10),
+                            height: screenHeight/18,
+                            width: (screenWidth / 2.5)/2.05,
                             decoration: BoxDecoration(
+                              color: Colors
+                                  .transparent, // Set your desired background color here
                               border: Border.all(
-                                color: redBorder, // Set the border color
-                                width: 1, // Set the border width
-                              ),
-                              color: redBorder.withOpacity(
-                                  0.1), // Background color with 50% opacity
-                              borderRadius: BorderRadius.circular(
-                                  8), // Optional: Rounded corners
+                                  color: textBorderColor,
+                                  width: 1), // Border color
+                              borderRadius:
+                                  BorderRadius.circular(5), // Rounded corners
                             ),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Container(
-                                  margin: EdgeInsets.only(right: 20),
-                                  // color: Colors.,
-                                  width: 25.0, // Width of the square
-                                  height: 25.0,
-                                  child: SvgPicture.asset(
-                                    'assets/Icons/location.svg',
-                                    // Replace with your SVG asset path
-                                    fit: BoxFit
-                                        .contain, // Adjusts SVG size within the square
-                                  ),
+                            child: DropdownButtonFormField<String>(
+                              decoration: const InputDecoration(
+                                border: InputBorder.none,
+                                hintText: "Select",
+                                contentPadding: EdgeInsets.only(bottom: 16,left: 23,right: 10),
+                              ),
+                              focusColor: Colors.transparent,
+                              value: selectBikeList,
+                              dropdownColor: Colors.white,
+                              items: bikeList,
+                              onSaved: (String? itemChosen) {
+                                setState(() {
+                                  selectBikeList = itemChosen!;
+                                });
+                              },
+                              onChanged: (String? value) {
+                                setState(() {
+                                  selectBikeList = value!;
+                                });
+                              },
+                            ),
+                          ),
+                          GestureDetector(
+                            onTap: () {},
+                            child: Container(
+                              height: screenHeight/18,
+                              width: (screenWidth / 2.5)/2.05,
+                              decoration: BoxDecoration(
+                                border: Border.all(
+                                  color: redBorder, // Set the border color
+                                  width: 1, // Set the border width
                                 ),
-                                Center(
-                                  child: Text(
-                                    "Pickup Location", // Button text
-                                    style: TextStyle(
-                                      color: redBorder, // Text color
-                                      fontSize: 16, // Text size
-                                      fontWeight: FontWeight.bold, // Text style
+                                color: redBorder.withOpacity(
+                                    0.1), // Background color with 50% opacity
+                                borderRadius: BorderRadius.circular(
+                                    5), // Optional: Rounded corners
+                              ),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Container(
+                                    margin: EdgeInsets.only(right: 20),
+                                    // color: Colors.,
+                                    width: 25.0, // Width of the square
+                                    height: 25.0,
+                                    child: SvgPicture.asset(
+                                      'assets/Icons/location.svg',
+                                      // Replace with your SVG asset path
+                                      fit: BoxFit
+                                          .contain, // Adjusts SVG size within the square
                                     ),
                                   ),
-                                ),
-                              ],
+                                  Center(
+                                    child: Text(
+                                      "Pickup Location", // Button text
+                                      style: TextStyle(
+                                        color: redBorder, // Text color
+                                        fontSize: 14, // Text size
+                                        fontWeight: FontWeight.bold, // Text style
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          )
+                        ]),
+                    SizedBox(height: 5,),
+                    SizedBox(
+                      // height: screenHeight/6,
+                      width: screenWidth / 2.5,
+                      child: CustomTextField(
+                        filledColor: Colors.grey.shade300,
+                        borderColor: Colors.grey,
+                        maxLines: 3,
+                        lable: 'Diagnosis',
+                        controller: diagnosis,
+                      ),
+                    ),
+                    SizedBox(height: 5,),
+                    Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          SizedBox(
+                            height: screenHeight/18,
+                            width: (screenWidth / 2.5)/2.05,
+                            child: CustomTextField(
+                              filledColor: Colors.grey.shade300,
+                              borderColor: Colors.grey,
+                              lable: 'Estimate Charges',
+                              controller: estimateCharges,
                             ),
                           ),
-                        )
-                      ]),
-                  SizedBox(height: screenHeight * 0.015),
-                  CustomTextField(
-                    filledColor: Colors.grey.shade300,
-                    borderColor: Colors.grey,
-                    maxLines: 4,
-                    lable: 'Diagnosis',
-                    controller: diagnosis,
-                  ),
-                  SizedBox(height: screenHeight * 0.015),
-                  Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Container(
-                          width: screenWidth / 3.045,
-                          child: CustomTextField(
-                            filledColor: Colors.grey.shade300,
-                            borderColor: Colors.grey,
-                            lable: 'Estimate Charges',
-                            controller: estimateCharges,
+                          SizedBox(
+                            height: screenHeight/18,
+                            width: (screenWidth / 2.5)/2.05,
+                            child: CustomTextField(
+                              popup:popup1,
+                              filledColor: Colors.grey.shade300,
+                              borderColor: Colors.grey,
+                              lable: 'Outstanding',
+                              controller: outstanding,
+                            ),
                           ),
-                        ),
-                        Container(
-                          width: screenWidth / 3.045,
-                          child: CustomTextField(
-                            filledColor: Colors.grey.shade300,
-                            borderColor: Colors.grey,
-                            lable: 'Outstanding',
-                            controller: outstanding,
-                          ),
-                        ),
-                      ]),
-                  SizedBox(height: screenHeight * 0.09),
-                  GestureDetector(
-                    onTap: () =>
-                        text == false ? editUpdate(index) : addDatumFunction(),
-                    child: Container(
-                        height: 50,
-                        // width: widget.popup == true ? 100 : 0,
-                        width: size.width / 1.45,
-                        decoration: BoxDecoration(
-                          border: Border.all(
-                            color:
-                                floatingButtonColor, // Set your desired border color here
-                            width: 1, // Set the width of the border
-                          ),
-                          color: floatingButtonColor,
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                        // padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 30),
-                        child: Center(
-                            child: Text(
-                          text == false ? "UPDATE" : "ADD",
-                          style: TextStyle(color: Colors.white),
-                        ))),
-                  ),
-                ],
+                        ]),
+                    SizedBox(height: 5),
+                    SizedBox(
+                      width: screenWidth / 2.5,
+                      height: screenHeight/18,
+                      child: GestureDetector(
+                        onTap: () =>
+                            text == false ? editUpdate(index) : addDatumFunction(),
+                        child: Container(
+                            height: 50,
+                            // width: widget.popup == true ? 100 : 0,
+                            width: size.width / 1.45,
+                            decoration: BoxDecoration(
+                              border: Border.all(
+                                color:
+                                    floatingButtonColor, // Set your desired border color here
+                                width: 1, // Set the width of the border
+                              ),
+                              color: floatingButtonColor,
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            // padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 30),
+                            child: Center(
+                                child: Text(
+                              text == false ? "UPDATE" : "ADD",
+                              style: TextStyle(color: Colors.white),
+                            ))),
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ),
           ),

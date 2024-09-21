@@ -62,6 +62,7 @@ class CustomTextField extends StatefulWidget {
   bool? icon;
   bool? editable;
   bool? display;
+  bool?popup;
 
   CustomTextField({
     Key? key,
@@ -119,7 +120,7 @@ class CustomTextField extends StatefulWidget {
     this.commentText,
     this.icon,
     this.editable,
-    this.display,
+    this.display, this.popup,
   }) : super(key: key);
 
   @override
@@ -143,6 +144,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
           autocorrect: false,
           textInputAction: TextInputAction.done,
           style: TextStyle(
+            fontSize: widget.popup == true? 12:13,
             color: lightGrey,
             fontWeight: FontWeight.w500,
           ),
@@ -152,12 +154,14 @@ class _CustomTextFieldState extends State<CustomTextField> {
             fillColor: Colors.transparent,
             border: InputBorder.none,
             labelText: widget.lable,
-            contentPadding:
+            // contentPadding: EdgeInsets.symmetric(vertical: 8.0, horizontal: 10.0), // Adjust vertical padding
+
+            contentPadding: widget.popup == true?EdgeInsets.symmetric(vertical: 8.0, horizontal: 10.0):
                 EdgeInsets.only(left: 24, top: 10, bottom: 20, right: 24),
             labelStyle: TextStyle(
                 color: textBorderColor,
                 fontWeight: FontWeight.w300,
-                fontSize: 13 // Color of the label text
+                fontSize: 12 // Color of the label text
                 ), // Padding inside the text field
             focusedBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(5),

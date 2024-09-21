@@ -46,7 +46,7 @@ class _BottomGestureButtonState extends State<BottomGestureButton> {
           width: widget.popup == true
               ? size.width / 1.45
               : widget.selectedIndexRow == 1 || widget.selectedIndexRow == 2
-                  ? size.width / 1.45
+                  ? size.width / 1.465
                   : size.width / 3.045,
           decoration: BoxDecoration(
             border: Border.all(

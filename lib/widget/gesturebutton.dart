@@ -46,14 +46,6 @@ class _GestureButtonState extends State<GestureButton> {
         decoration: BoxDecoration(
           color: widget.popup == true ? Colors.transparent : redButtonColor,
           borderRadius: BorderRadius.circular(10),
-          // boxShadow: [
-          //   BoxShadow(
-          //     color: Colors.black.withOpacity(0.2),
-          //     spreadRadius: 2,
-          //     blurRadius: 5,
-          //     offset: Offset(0, 3),
-          //   ),
-          // ],
         ),
         padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 30),
         child: SvgPicture.asset(
