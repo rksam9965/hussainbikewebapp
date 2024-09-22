@@ -38,7 +38,11 @@ class _GestureButtonState extends State<GestureButton> {
       onTap: () {
         widget.logout == true
             ? widget.popUp!()
-            : widget.showPopup!(context, true, 0);
+            : widget.showPopup!(
+                context,
+                true,
+                0,
+              );
       },
       child: Container(
         height: 50,

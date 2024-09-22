@@ -8,7 +8,17 @@ class DatePickerExample extends StatefulWidget {
   String? text;
   String? label;
   bool? disable;
-  DatePickerExample({Key? key, this.text, this.label, this.disable})
+  bool? edit;
+  GlobalKey<DatePickerExampleState>? value;
+  bool? ddd;
+  DatePickerExample(
+      {Key? key,
+      this.text,
+      this.label,
+      this.disable,
+      this.edit,
+      this.value,
+      this.ddd})
       : super(key: key);
 
   @override
@@ -39,9 +49,12 @@ class DatePickerExampleState extends State<DatePickerExample> {
   @override
   void initState() {
     super.initState();
-
-    _selectedDate = DateTime.now();
-    formattedDate = DateFormat('yyyy-MM-dd').format(DateTime.now());
+    if (widget.edit == true) {
+      formattedDate = widget.value.toString();
+    } else {
+      _selectedDate = DateTime.now();
+      formattedDate = DateFormat('yyyy-MM-dd').format(DateTime.now());
+    }
   }
 
   @override
@@ -68,8 +81,11 @@ class DatePickerExampleState extends State<DatePickerExample> {
                   widget.disable == true
                       ? widget.text.toString()
                       : widget.label!,
-                  style:
-                      TextStyle(fontSize: 12, color: lightGrey), // Text color
+                  style: TextStyle(
+                      fontSize: 12,
+                      color: widget.ddd == true
+                          ? textBorderColor
+                          : lightGrey), // Text color
                 ),
         ),
       ),

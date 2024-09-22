@@ -1,17 +1,18 @@
-import 'package:flutter/cupertino.dart';
+import 'dart:typed_data';
 import 'package:flutter/material.dart';
-import 'package:hussainbikewebapp/signature.dart';
 import 'package:hussainbikewebapp/utils/colors.dart';
 import 'package:hussainbikewebapp/widget/date_picker.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:signature/signature.dart';
+import 'dart:ui' as ui;
+import 'package:flutter_svg/svg.dart';
 
 import 'Textfield.dart';
 import 'datamodule/dummyData.dart';
 
 class Workshopscreen extends StatefulWidget {
   bool? topbarbutton;
-  Workshopscreen({super.key, this.topbarbutton});
+  Function? ontab1;
+  Workshopscreen({super.key, this.topbarbutton, this.ontab1});
 
   @override
   State<Workshopscreen> createState() => _WorkshopscreenState();
@@ -159,6 +160,45 @@ class _WorkshopscreenState extends State<Workshopscreen> {
     Item1(code: "65", printName: "track", qty: "5", price: "6763")
   ];
 
+  Future<Uint8List?> _captureSignature() async {
+    if (_controller.isNotEmpty) {
+      // Capture the signature as an image
+      final ui.Image? signatureImage = await _controller.toImage();
+
+      // Create a new image with a background color
+      final ui.PictureRecorder recorder = ui.PictureRecorder();
+      final Canvas canvas = Canvas(recorder);
+
+      // Set the background color
+      final backgroundColor =
+          homeScreenContainerColor; // Change to your desired color
+      canvas.drawPaint(Paint()..color = backgroundColor);
+
+      // Draw the signature on top of the background
+      canvas.drawImage(signatureImage!, Offset.zero, Paint());
+
+      // End the recording and convert to an image
+      final ui.Image newImage = await recorder
+          .endRecording()
+          .toImage(signatureImage.width, signatureImage.height);
+
+      // Convert the new image to PNG format
+      final ByteData? byteData =
+          await newImage.toByteData(format: ui.ImageByteFormat.png);
+      return byteData?.buffer.asUint8List(); // Convert to Uint8List
+    }
+    return null;
+  }
+
+  submitSignature() async {
+    final signatureBytes = await _captureSignature();
+    if (signatureBytes != null) {
+      widget.ontab1!();
+      Navigator.pop(context, signatureBytes);
+      Navigator.pop(context, signatureBytes);
+    }
+  }
+
   signaturePopUp(BuildContext context) {
     var screenWidth = MediaQuery.of(context).size.width;
     var screenHeight = MediaQuery.of(context).size.height;
@@ -189,6 +229,21 @@ class _WorkshopscreenState extends State<Workshopscreen> {
                     children: [
                       Stack(
                         children: [
+                          Container(
+                            alignment: Alignment.centerRight,
+                            child: IconButton(
+                              icon: const Icon(
+                                color: Colors.black,
+                                Icons.clear,
+                                size: 20,
+                              ),
+                              onPressed: () {
+                                setState(() {
+                                  _controller.clear();
+                                });
+                              },
+                            ),
+                          ),
                           Signature(
                             controller: _controller,
                             height: 200,
@@ -200,7 +255,7 @@ class _WorkshopscreenState extends State<Workshopscreen> {
                             child: IconButton(
                               icon: Icon(
                                 color: Colors.black,
-                                Icons.close,
+                                Icons.clear,
                                 size: 20,
                               ),
                               onPressed: () {
@@ -212,9 +267,14 @@ class _WorkshopscreenState extends State<Workshopscreen> {
                           ),
                         ],
                       ),
-                      SizedBox(height: 10),
+                      SizedBox(height: 8),
                       GestureDetector(
-                        onTap: () => {Navigator.pop(context)},
+                        onTap: () => {
+                          submitSignature()
+                          // widget.ontab1!(),
+                          // Navigator.pop(context),
+                          // Navigator.pop(context)
+                        },
                         child: Container(
                             height: screenHeight * 0.08,
                             width: screenWidth / 4,
@@ -229,27 +289,12 @@ class _WorkshopscreenState extends State<Workshopscreen> {
                             ),
                             child: Center(
                                 child: Text(
-                              "SAVE",
+                              "COMPLETE",
                               style: TextStyle(color: Colors.white),
                             ))),
                       ),
                     ],
                   ),
-                ),
-              ),
-              Container(
-                margin: EdgeInsets.only(
-                    left: screenWidth / 1.6, top: screenHeight / 5.5),
-                child: IconButton(
-                  icon: SvgPicture.asset(
-                    'assets/Icons/cross.svg', // Update this path to your SVG file
-                    width: 25,
-                    height: 25,
-                    color: Colors.black, // You can change the color if needed
-                  ),
-                  onPressed: () {
-                    Navigator.pop(context);
-                  },
                 ),
               ),
             ],
@@ -964,21 +1009,12 @@ class _WorkshopscreenState extends State<Workshopscreen> {
                       top: 100,
                     ),
                     width: screenWidth,
-                    // Button width
                     height: 50,
-                    // Button height
                     decoration: BoxDecoration(
-                      color: completingJobOrder
-                          .withOpacity(0.6), // Background color
+                      color: widget.topbarbutton == true
+                          ? completingJobOrder.withOpacity(0.6)
+                          : floatingButtonColor, // Background color
                       borderRadius: BorderRadius.circular(5), // Rounded corners
-                      // boxShadow: [
-                      //   BoxShadow(
-                      //     color: Colors.grey.withOpacity(0.5),
-                      //     spreadRadius: 2,
-                      //     blurRadius: 5,
-                      //     offset: Offset(0, 3), // Shadow position
-                      //   ),
-                      // ],
                     ),
                     child: const Center(
                       child: Text(

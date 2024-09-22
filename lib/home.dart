@@ -35,33 +35,32 @@ class HomePageState extends State<HomePage> {
   final TextEditingController phoneNumber = TextEditingController();
   final TextEditingController email = TextEditingController();
   final TextEditingController vat = TextEditingController();
-  final TextEditingController address1 = TextEditingController();
-  final textFieldsDate1 = GlobalKey<DatePickerExampleState>();
-  final textFieldsDate2 = GlobalKey<DatePickerExampleState>();
-
+  var textFieldsDate1 = GlobalKey<DatePickerExampleState>();
+  var textFieldsDate2 = GlobalKey<DatePickerExampleState>();
 
   int selectedIndex = 0; // Track the selected screen index
   int selectedIndex1 = 0;
   int passingIndex = 0;
 
   List<DropdownMenuItem<String>> weekList = [];
-  var selectWeek = '';
+  var selectWeek = 'week 1';
 
   List<DropdownMenuItem<String>> customerList = [];
+  var selectCustomer = 'Customer 1';
 
   List<DropdownMenuItem<String>> bikeList = [];
-  var selectBikeList = '';
+  var selectBikeList = '123';
 
   List<Item> items = [
     Item(
       name: 'Imman',
       salesman: 'John Doe',
       phoneCode: '+1',
-      deliverDate: '20-09-2024',
+      deliverDate: '2024-09-20',
+      receiveDate: '2024-09-24',
       customer: 'Customer A',
       mobileNumber: '1234567890',
       driverDetails: 'Driver A',
-      receiveDate: '2024-09-20',
       bikeNumber: 'Bike123',
       diagnosis: 'Diagnosis A',
       estimateCharges: '100',
@@ -70,7 +69,9 @@ class HomePageState extends State<HomePage> {
       phoneNumber: '0987654321',
       email: 'email@example.com',
       vat: 'VAT123',
-      address1: 'Address1 A',
+      selectDriver: "123",
+      selectCustomer: "Customer 2",
+      selectWeek: "week 2",
     )
   ];
 
@@ -90,15 +91,32 @@ class HomePageState extends State<HomePage> {
     phoneNumber.clear();
     email.clear();
     vat.clear();
-    address1.clear();
   }
 
-  void _onButtonTap(int index) {
+  _onButtonTap(int index) {
     setState(() {
       selectedIndex = index;
     });
     setState(() {
       passingIndex = index;
+    });
+  }
+
+  onTab2() {
+    setState(() {
+      selectedIndex = 2;
+    });
+    setState(() {
+      passingIndex = 2;
+    });
+  }
+
+  onTab1() {
+    setState(() {
+      selectedIndex = 1;
+    });
+    setState(() {
+      passingIndex = 1;
     });
   }
 
@@ -113,24 +131,19 @@ class HomePageState extends State<HomePage> {
     workerFilter();
     customerFilter();
     bikeNumberFilter();
-
-    print('Item name: ${items[0].name}');
-
     super.initState();
   }
-
-  var selectCustomer = '';
 
   addDatumFunction() {
     setState(() {
       items.add(Item(
         name: name.text,
-        deliverDate: textFieldsDate1.currentState?.formattedDate.toString(),
+        deliverDate: textFieldsDate1.currentState!.formattedDate,
+        receiveDate: textFieldsDate2.currentState?.formattedDate,
         salesman: salesman.text,
         phoneCode: phoneCode.text,
         customer: selectCustomer.toString(),
         mobileNumber: mobileNumber.text,
-        receiveDate: textFieldsDate2.currentState?.formattedDate.toString(),
         driverDetails: driverDetails.text,
         bikeNumber: selectBikeList.toString(),
         diagnosis: diagnosis.text,
@@ -140,7 +153,6 @@ class HomePageState extends State<HomePage> {
         phoneNumber: phoneNumber.text,
         email: email.text,
         vat: vat.text,
-        address1: address1.text,
       ));
     });
     Navigator.of(context).pop();
@@ -149,12 +161,12 @@ class HomePageState extends State<HomePage> {
   customerFilter() {
     customerList.add(
       DropdownMenuItem(
-        value: "",
+        value: "Customer 1",
         child: Center(
           child: Text(
             'Customer 1',
             style: TextStyle(
-                color: Colors.grey,
+                color: lightGrey,
                 fontWeight: FontWeight.w300,
                 fontSize: 12 // Color of the label text
                 ),
@@ -169,7 +181,7 @@ class HomePageState extends State<HomePage> {
           child: Text(
             'Customer 2',
             style: TextStyle(
-                color: Colors.grey,
+                color: lightGrey,
                 fontWeight: FontWeight.w300,
                 fontSize: 12 // Color of the label text
                 ),
@@ -184,7 +196,7 @@ class HomePageState extends State<HomePage> {
           child: Text(
             "customer 3",
             style: TextStyle(
-                color: Colors.grey,
+                color: lightGrey,
                 fontWeight: FontWeight.w300,
                 fontSize: 12 // Color of the label text
                 ),
@@ -197,12 +209,12 @@ class HomePageState extends State<HomePage> {
   bikeNumberFilter() {
     bikeList.add(
       DropdownMenuItem(
-        value: "",
+        value: "5645",
         child: Center(
           child: Text(
             '5645',
             style: TextStyle(
-                color: Colors.grey,
+                color: lightGrey,
                 fontWeight: FontWeight.w300,
                 fontSize: 12 // Color of the label text
                 ),
@@ -212,12 +224,12 @@ class HomePageState extends State<HomePage> {
     );
     bikeList.add(
       DropdownMenuItem(
-        value: "1",
+        value: "123",
         child: Center(
           child: Text(
             '123',
             style: TextStyle(
-                color: Colors.grey,
+                color: lightGrey,
                 fontWeight: FontWeight.w300,
                 fontSize: 12 // Color of the label text
                 ),
@@ -227,14 +239,14 @@ class HomePageState extends State<HomePage> {
     );
     bikeList.add(
       DropdownMenuItem(
-        value: "2",
+        value: "345",
         child: Container(
           // height: 30,
           child: Center(
             child: Text(
               "345",
               style: TextStyle(
-                  color: Colors.grey,
+                  color: lightGrey,
                   fontWeight: FontWeight.w300,
                   fontSize: 12 // Color of the label text
                   ),
@@ -247,13 +259,13 @@ class HomePageState extends State<HomePage> {
 
   workerFilter() {
     weekList.add(
-      const DropdownMenuItem(
-        value: "",
+      DropdownMenuItem(
+        value: "week 1",
         child: Center(
           child: Text(
             'week 1',
             style: TextStyle(
-              color: Colors.black,
+              color: lightGrey,
               fontSize: 12, // Set font size to 20
               fontWeight: FontWeight.normal, // Set font weight to bold
             ),
@@ -262,13 +274,13 @@ class HomePageState extends State<HomePage> {
       ),
     );
     weekList.add(
-      const DropdownMenuItem(
-        value: "1",
+      DropdownMenuItem(
+        value: "week 2",
         child: Center(
           child: Text(
             'week 2',
             style: TextStyle(
-              color: Colors.black,
+              color: lightGrey,
               fontSize: 12, // Set font size to 20
               fontWeight: FontWeight.normal, // Set font weight to bold
             ),
@@ -277,13 +289,13 @@ class HomePageState extends State<HomePage> {
       ),
     );
     weekList.add(
-      const DropdownMenuItem(
-        value: "2",
+      DropdownMenuItem(
+        value: "week 3",
         child: Center(
           child: Text(
             "week 3",
             style: TextStyle(
-              color: Colors.black,
+              color: lightGrey,
               fontSize: 12, // Set font size to 20
               fontWeight: FontWeight.normal, // Set font weight to bold
             ),
@@ -371,6 +383,8 @@ class HomePageState extends State<HomePage> {
               Row(
                 children: [
                   Container(
+                    // / 4.067
+                    width: screenWidth / 4.067,
                     height: size.height / 0.8125,
                     color: homeScreenBackgroundContainerColor,
                     margin: const EdgeInsets.only(top: 30),
@@ -399,8 +413,8 @@ class HomePageState extends State<HomePage> {
                                           borderRadius:
                                               BorderRadius.circular(0),
                                         ),
-                                        child: Center(
-                                          child: const Text(
+                                        child: const Center(
+                                          child: Text(
                                             'Week',
                                             style: TextStyle(
                                                 color: Colors.black,
@@ -421,8 +435,8 @@ class HomePageState extends State<HomePage> {
                                           borderRadius:
                                               BorderRadius.circular(0),
                                         ),
-                                        child: Center(
-                                          child: const Text(
+                                        child: const Center(
+                                          child: Text(
                                             'Month',
                                             style: TextStyle(
                                                 color: Colors.black,
@@ -564,10 +578,15 @@ class HomePageState extends State<HomePage> {
                       children: [
                         for (int i = 0; i < items.length; i++)
                           CustomerScreen1(
+                              ontab: onTab2,
+                              ontab1: onTab1,
                               // selectedIndex1:selectedIndex1
                               showPopup: showPopup,
                               items: items,
                               index: i,
+                              onEdit: (updatedItem) {
+                                _editItem(i, updatedItem);
+                              },
                               selectedIndex: selectedIndex)
                       ],
                     ),
@@ -579,6 +598,18 @@ class HomePageState extends State<HomePage> {
         ),
       ),
     );
+  }
+
+  kk(updatedItem) {
+    for (int i = 0; i < items.length; i++) {
+      _editItem(i, updatedItem);
+    }
+  }
+
+  void _editItem(int index, Item newItem) {
+    setState(() {
+      items[index] = newItem; // Update the item in the list
+    });
   }
 
   editInitialSetupFunction(int? index) {
@@ -622,20 +653,6 @@ class HomePageState extends State<HomePage> {
     //     index: index,
     //     selectedIndex: selectedIndex);
     Navigator.pop(context);
-    Expanded(
-      flex: 8,
-      child: IndexedStack(
-        index: selectedIndex1,
-        children: [
-          for (int i = 0; i < index!; i++)
-            CustomerScreen1(
-                showPopup: showPopup,
-                items: items,
-                index: index,
-                selectedIndex: selectedIndex)
-        ],
-      ),
-    );
   }
 
   Widget _buildSearchController() {
@@ -688,11 +705,12 @@ class HomePageState extends State<HomePage> {
   }
 
   showPopup(BuildContext context, bool? text, int? index) {
-    text == false ? editInitialSetupFunction(index) : clearAllControllers();
     final Size size = MediaQuery.of(context).size;
     var screenWidth = MediaQuery.of(context).size.width;
     var screenHeight = MediaQuery.of(context).size.height;
     bool? popup1 = true;
+    bool? ddd = true;
+    clearAllControllers();
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -705,63 +723,152 @@ class HomePageState extends State<HomePage> {
               borderRadius: BorderRadius.all(Radius.circular(8.0)),
             ),
             content: SingleChildScrollView(
-              child: Container(
-                // width: screenWidth/52,
-                // height: screenHeight/2,
-                child: Column(
-                  children: [
-                    Center(
-                      child: Text(
-                        text == false ? "EDIT JOB ORDER" : 'NEW JOB ORDER',
-                        style: TextStyle(
-                            fontWeight: FontWeight.bold,
-                            color: Colors.black),
+              child: Column(
+                children: [
+                  const Center(
+                    child: Text(
+                      'NEW JOB ORDER',
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold, color: Colors.black),
+                    ),
+                  ),
+                  SizedBox(height: screenHeight * 0.02),
+                  SizedBox(
+                      width: screenWidth / 2.5,
+                      height: screenHeight / 18,
+                      child: TextFieldFunction("Salesman", salesman)),
+                  SizedBox(
+                    height: 5,
+                  ),
+                  SizedBox(
+                      width: screenWidth / 2.5,
+                      height: screenHeight / 18,
+                      child: TextFieldFunction("Phone Code", phoneCode)),
+                  SizedBox(
+                    height: 5,
+                  ),
+                  Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        SizedBox(
+                          height: screenHeight / 18,
+                          width: (screenWidth / 2.5) / 2.05,
+                          child: DatePickerExample(
+                              ddd: ddd,
+                              label: "Receive Date",
+                              key: textFieldsDate2),
+                        ),
+                        SizedBox(
+                          height: screenHeight / 18,
+                          width: (screenWidth / 2.5) / 2.05,
+                          child: DatePickerExample(
+                              ddd: ddd,
+                              label: "Deliver Date",
+                              key: textFieldsDate1),
+                        ),
+                      ]),
+                  SizedBox(
+                    height: 5,
+                  ),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Container(
+                        height: screenHeight / 18,
+                        // width: screenWidth / 2.5,
+
+                        width: (screenWidth / 2.5) / 1.11,
+                        decoration: BoxDecoration(
+                          color: Colors
+                              .transparent, // Set your desired background color here
+                          border: Border.all(
+                              color: textBorderColor, width: 1), // Border color
+                          borderRadius:
+                              BorderRadius.circular(5), // Rounded corners
+                        ),
+                        child: DropdownButtonFormField<String>(
+                          decoration: const InputDecoration(
+                            border: InputBorder.none,
+                            hintText: "Select",
+                            contentPadding: EdgeInsets.only(
+                                bottom: 16, left: 23, right: 10),
+                          ),
+                          focusColor: Colors.transparent,
+                          value: selectCustomer,
+                          dropdownColor: Colors.white,
+                          items: customerList,
+                          onSaved: (String? itemChosen) {
+                            setState(() {
+                              selectCustomer = itemChosen!;
+                            });
+                          },
+                          onChanged: (String? value) {
+                            setState(() {
+                              selectCustomer = value!;
+                            });
+                          },
+                        ),
                       ),
-                    ),
-                    SizedBox(height: screenHeight * 0.02),
-                    SizedBox(
-                        width: screenWidth / 2.5,
-                        height: screenHeight/18,
-                        child: TextFieldFunction("Salesman", salesman)
-                    ),
-                    SizedBox(height: 5,),
-                    SizedBox(
-                        width: screenWidth / 2.5,
-                        height: screenHeight/18,
-                        child: TextFieldFunction("Phone Code", phoneCode)
-                    ),
-                    SizedBox(height: 5,),
-                    Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          SizedBox(
-                            height: screenHeight/18,
-                            width: (screenWidth / 2.5)/2.05,
-                            child: DatePickerExample(
-                                label: "Receive Date", key: textFieldsDate2),
+                      GestureDetector(
+                        onTap: () {
+                          nextPopup(context);
+                        },
+                        child: Container(
+                          height: screenHeight / 18,
+                          width: 50,
+                          decoration: BoxDecoration(
+                            border:
+                                Border.all(color: textBorderColor, width: 1),
+                            color: Colors
+                                .transparent, // Background color// Border color
+                            borderRadius: BorderRadius.circular(
+                                8), // Optional: Rounded corners
                           ),
-                          SizedBox(
-                            height: screenHeight/18,
-                            width: (screenWidth / 2.5)/2.05,
-                            child: DatePickerExample(
-                                label: "Deliver Date", key: textFieldsDate1),
+                          child: Center(
+                            child: Container(
+                              width: 20.0, // Width of the square
+                              height: 20.0,
+                              child: SvgPicture.asset(
+                                'assets/Icons/add_person.svg',
+                                // Replace with your SVG asset path
+                                fit: BoxFit
+                                    .contain, // Adjusts SVG size within the square
+                              ),
+                            ),
                           ),
-                        ]),
-                    SizedBox(height: 5,),
-                    Row(
+                        ),
+                      )
+                    ],
+                  ),
+                  SizedBox(
+                    height: 5,
+                  ),
+                  SizedBox(
+                      width: screenWidth / 2.5,
+                      height: screenHeight / 18,
+                      child: TextFieldFunction("Mobile Number", mobileNumber)),
+                  SizedBox(
+                    height: 5,
+                  ),
+                  SizedBox(
+                      width: screenWidth / 2.5,
+                      height: screenHeight / 18,
+                      child:
+                          TextFieldFunction("Driver Details", driverDetails)),
+                  SizedBox(height: 5),
+                  Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Container(
-                          height: screenHeight/18,
-                          // width: screenWidth / 2.5,
-
-                          width: (screenWidth / 2.5)/1.11,
+                          // padding: EdgeInsets.symmetric(horizontal: 10,vertical: 10),
+                          height: screenHeight / 18,
+                          width: (screenWidth / 2.5) / 2.05,
                           decoration: BoxDecoration(
-
                             color: Colors
                                 .transparent, // Set your desired background color here
                             border: Border.all(
-                                color: textBorderColor, width: 1), // Border color
+                                color: textBorderColor,
+                                width: 1), // Border color
                             borderRadius:
                                 BorderRadius.circular(5), // Rounded corners
                           ),
@@ -769,217 +876,141 @@ class HomePageState extends State<HomePage> {
                             decoration: const InputDecoration(
                               border: InputBorder.none,
                               hintText: "Select",
-
-                              contentPadding: EdgeInsets.only(bottom: 16,left: 23,right: 10),
+                              contentPadding: EdgeInsets.only(
+                                  bottom: 16, left: 23, right: 10),
                             ),
                             focusColor: Colors.transparent,
-                            value: selectCustomer,
+                            value: selectBikeList,
                             dropdownColor: Colors.white,
-                            items: customerList,
+                            items: bikeList,
                             onSaved: (String? itemChosen) {
                               setState(() {
-                                selectCustomer = itemChosen!;
+                                selectBikeList = itemChosen!;
                               });
                             },
                             onChanged: (String? value) {
                               setState(() {
-                                selectCustomer = value!;
+                                selectBikeList = value!;
                               });
                             },
                           ),
                         ),
                         GestureDetector(
-                          onTap: () {
-                            nextPopup(context);
-                          },
+                          onTap: () {},
                           child: Container(
-                            height: screenHeight/18,
-                            width: 50,
+                            height: screenHeight / 18,
+                            width: (screenWidth / 2.5) / 2.05,
                             decoration: BoxDecoration(
-                              border: Border.all(color: textBorderColor, width: 1),
-                              color: Colors
-                                  .transparent, // Background color// Border color
-                              borderRadius: BorderRadius.circular(
-                                  8), // Optional: Rounded corners
-                            ),
-                            child: Center(
-                              child: Container(
-                                width: 20.0, // Width of the square
-                                height: 20.0,
-                                child: SvgPicture.asset(
-                                  'assets/Icons/add_person.svg',
-                                  // Replace with your SVG asset path
-                                  fit: BoxFit
-                                      .contain, // Adjusts SVG size within the square
-                                ),
+                              border: Border.all(
+                                color: redBorder, // Set the border color
+                                width: 1, // Set the border width
                               ),
+                              color: redBorder.withOpacity(
+                                  0.1), // Background color with 50% opacity
+                              borderRadius: BorderRadius.circular(
+                                  5), // Optional: Rounded corners
+                            ),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Container(
+                                  margin: EdgeInsets.only(right: 20),
+                                  // color: Colors.,
+                                  width: 25.0, // Width of the square
+                                  height: 25.0,
+                                  child: SvgPicture.asset(
+                                    'assets/Icons/location.svg',
+                                    // Replace with your SVG asset path
+                                    fit: BoxFit
+                                        .contain, // Adjusts SVG size within the square
+                                  ),
+                                ),
+                                Center(
+                                  child: Text(
+                                    "Pickup Location", // Button text
+                                    style: TextStyle(
+                                      color: redBorder, // Text color
+                                      fontSize: 14, // Text size
+                                      fontWeight: FontWeight.bold, // Text style
+                                    ),
+                                  ),
+                                ),
+                              ],
                             ),
                           ),
                         )
-                      ],
+                      ]),
+                  SizedBox(
+                    height: 5,
+                  ),
+                  SizedBox(
+                    // height: screenHeight/6,
+                    width: screenWidth / 2.5,
+                    child: CustomTextField(
+                      filledColor: Colors.grey.shade300,
+                      borderColor: Colors.grey,
+                      maxLines: 3,
+                      lable: 'Diagnosis',
+                      controller: diagnosis,
                     ),
-                    SizedBox(height: 5,),
-                    SizedBox(
-                        width: screenWidth / 2.5,
-                        height: screenHeight/18,
-                        child: TextFieldFunction("Mobile Number", mobileNumber)),
-                    SizedBox(height: 5,),
-                    SizedBox(
-                        width: screenWidth / 2.5,
-                        height: screenHeight/18,
-                        child: TextFieldFunction("Driver Details", driverDetails)),
-                    SizedBox(height: 5),
-                    Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Container(
-                            // padding: EdgeInsets.symmetric(horizontal: 10,vertical: 10),
-                            height: screenHeight/18,
-                            width: (screenWidth / 2.5)/2.05,
-                            decoration: BoxDecoration(
-                              color: Colors
-                                  .transparent, // Set your desired background color here
-                              border: Border.all(
-                                  color: textBorderColor,
-                                  width: 1), // Border color
-                              borderRadius:
-                                  BorderRadius.circular(5), // Rounded corners
-                            ),
-                            child: DropdownButtonFormField<String>(
-                              decoration: const InputDecoration(
-                                border: InputBorder.none,
-                                hintText: "Select",
-                                contentPadding: EdgeInsets.only(bottom: 16,left: 23,right: 10),
-                              ),
-                              focusColor: Colors.transparent,
-                              value: selectBikeList,
-                              dropdownColor: Colors.white,
-                              items: bikeList,
-                              onSaved: (String? itemChosen) {
-                                setState(() {
-                                  selectBikeList = itemChosen!;
-                                });
-                              },
-                              onChanged: (String? value) {
-                                setState(() {
-                                  selectBikeList = value!;
-                                });
-                              },
-                            ),
+                  ),
+                  SizedBox(
+                    height: 5,
+                  ),
+                  Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        SizedBox(
+                          height: screenHeight / 18,
+                          width: (screenWidth / 2.5) / 2.05,
+                          child: CustomTextField(
+                            filledColor: Colors.grey.shade300,
+                            borderColor: Colors.grey,
+                            lable: 'Estimate Charges',
+                            controller: estimateCharges,
                           ),
-                          GestureDetector(
-                            onTap: () {},
-                            child: Container(
-                              height: screenHeight/18,
-                              width: (screenWidth / 2.5)/2.05,
-                              decoration: BoxDecoration(
-                                border: Border.all(
-                                  color: redBorder, // Set the border color
-                                  width: 1, // Set the border width
-                                ),
-                                color: redBorder.withOpacity(
-                                    0.1), // Background color with 50% opacity
-                                borderRadius: BorderRadius.circular(
-                                    5), // Optional: Rounded corners
-                              ),
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Container(
-                                    margin: EdgeInsets.only(right: 20),
-                                    // color: Colors.,
-                                    width: 25.0, // Width of the square
-                                    height: 25.0,
-                                    child: SvgPicture.asset(
-                                      'assets/Icons/location.svg',
-                                      // Replace with your SVG asset path
-                                      fit: BoxFit
-                                          .contain, // Adjusts SVG size within the square
-                                    ),
-                                  ),
-                                  Center(
-                                    child: Text(
-                                      "Pickup Location", // Button text
-                                      style: TextStyle(
-                                        color: redBorder, // Text color
-                                        fontSize: 14, // Text size
-                                        fontWeight: FontWeight.bold, // Text style
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ),
+                        ),
+                        SizedBox(
+                          height: screenHeight / 18,
+                          width: (screenWidth / 2.5) / 2.05,
+                          child: CustomTextField(
+                            popup: popup1,
+                            filledColor: Colors.grey.shade300,
+                            borderColor: Colors.grey,
+                            lable: 'Outstanding',
+                            controller: outstanding,
+                          ),
+                        ),
+                      ]),
+                  SizedBox(height: 15),
+                  SizedBox(
+                    width: screenWidth / 2.5,
+                    height: screenHeight / 18,
+                    child: GestureDetector(
+                      onTap: () {
+                        addDatumFunction();
+                      },
+                      child: Container(
+                          height: 50,
+                          width: size.width / 1.45,
+                          decoration: BoxDecoration(
+                            border: Border.all(
+                              color:
+                                  floatingButtonColor, // Set your desired border color here
+                              width: 1, // Set the width of the border
                             ),
-                          )
-                        ]),
-                    SizedBox(height: 5,),
-                    SizedBox(
-                      // height: screenHeight/6,
-                      width: screenWidth / 2.5,
-                      child: CustomTextField(
-                        filledColor: Colors.grey.shade300,
-                        borderColor: Colors.grey,
-                        maxLines: 3,
-                        lable: 'Diagnosis',
-                        controller: diagnosis,
-                      ),
+                            color: floatingButtonColor,
+                            borderRadius: BorderRadius.circular(5),
+                          ),
+                          // padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 30),
+                          child: Center(
+                              child: Text(
+                            "ADD",
+                            style: TextStyle(color: Colors.white),
+                          ))),
                     ),
-                    SizedBox(height: 5,),
-                    Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          SizedBox(
-                            height: screenHeight/18,
-                            width: (screenWidth / 2.5)/2.05,
-                            child: CustomTextField(
-                              filledColor: Colors.grey.shade300,
-                              borderColor: Colors.grey,
-                              lable: 'Estimate Charges',
-                              controller: estimateCharges,
-                            ),
-                          ),
-                          SizedBox(
-                            height: screenHeight/18,
-                            width: (screenWidth / 2.5)/2.05,
-                            child: CustomTextField(
-                              popup:popup1,
-                              filledColor: Colors.grey.shade300,
-                              borderColor: Colors.grey,
-                              lable: 'Outstanding',
-                              controller: outstanding,
-                            ),
-                          ),
-                        ]),
-                    SizedBox(height: 5),
-                    SizedBox(
-                      width: screenWidth / 2.5,
-                      height: screenHeight/18,
-                      child: GestureDetector(
-                        onTap: () =>
-                            text == false ? editUpdate(index) : addDatumFunction(),
-                        child: Container(
-                            height: 50,
-                            // width: widget.popup == true ? 100 : 0,
-                            width: size.width / 1.45,
-                            decoration: BoxDecoration(
-                              border: Border.all(
-                                color:
-                                    floatingButtonColor, // Set your desired border color here
-                                width: 1, // Set the width of the border
-                              ),
-                              color: floatingButtonColor,
-                              borderRadius: BorderRadius.circular(10),
-                            ),
-                            // padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 30),
-                            child: Center(
-                                child: Text(
-                              text == false ? "UPDATE" : "ADD",
-                              style: TextStyle(color: Colors.white),
-                            ))),
-                      ),
-                    ),
-                  ],
-                ),
+                  ),
+                ],
               ),
             ),
           ),
@@ -1009,7 +1040,7 @@ class HomePageState extends State<HomePage> {
                   "ADD CUSTOMER",
                   style: TextStyle(
                       color: floatingButtonColor,
-                      fontSize: 14,
+                      fontSize: 12,
                       fontWeight: FontWeight.bold),
                 ),
                 content: SingleChildScrollView(
@@ -1017,7 +1048,8 @@ class HomePageState extends State<HomePage> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Container(
-                        width: screenWidth / 3.045,
+                        width: screenWidth / 5,
+                        height: 35,
                         child: CustomTextField(
                           filledColor: Colors.grey.shade300,
                           borderColor: Colors.grey,
@@ -1025,9 +1057,10 @@ class HomePageState extends State<HomePage> {
                           controller: name,
                         ),
                       ),
-                      SizedBox(height: 6),
+                      SizedBox(height: 4),
                       Container(
-                        width: screenWidth / 3.045,
+                        width: screenWidth / 5,
+                        height: 35,
                         child: CustomTextField(
                           filledColor: Colors.grey.shade300,
                           borderColor: Colors.grey,
@@ -1035,9 +1068,10 @@ class HomePageState extends State<HomePage> {
                           controller: phoneNumber,
                         ),
                       ),
-                      SizedBox(height: 6),
+                      SizedBox(height: 4),
                       Container(
-                        width: screenWidth / 3.045,
+                        width: screenWidth / 5,
+                        height: 35,
                         child: CustomTextField(
                           filledColor: Colors.grey.shade300,
                           borderColor: Colors.grey,
@@ -1045,9 +1079,10 @@ class HomePageState extends State<HomePage> {
                           controller: email,
                         ),
                       ),
-                      SizedBox(height: 6),
+                      SizedBox(height: 4),
                       Container(
-                        width: screenWidth / 3.045,
+                        width: screenWidth / 5,
+                        height: 35,
                         child: CustomTextField(
                           filledColor: Colors.grey.shade300,
                           borderColor: Colors.grey,
@@ -1055,9 +1090,10 @@ class HomePageState extends State<HomePage> {
                           controller: vat,
                         ),
                       ),
-                      SizedBox(height: 10),
+                      SizedBox(height: 4),
                       Container(
-                        width: screenWidth / 3.045,
+                        width: screenWidth / 5,
+                        height: 35,
                         child: CustomTextField(
                           filledColor: Colors.grey.shade300,
                           borderColor: Colors.grey,
@@ -1069,8 +1105,8 @@ class HomePageState extends State<HomePage> {
                       GestureDetector(
                         onTap: () => {Navigator.pop(context)},
                         child: Container(
-                            height: 50,
-                            width: screenWidth / 3.045,
+                            width: screenWidth / 5,
+                            height: 35,
                             decoration: BoxDecoration(
                               border: Border.all(
                                 color:
@@ -1078,12 +1114,13 @@ class HomePageState extends State<HomePage> {
                                 width: 1, // Set the width of the border
                               ),
                               color: floatingButtonColor,
-                              borderRadius: BorderRadius.circular(10),
+                              borderRadius: BorderRadius.circular(5),
                             ),
                             child: Center(
                                 child: Text(
                               "SAVE",
-                              style: TextStyle(color: Colors.white),
+                              style:
+                                  TextStyle(color: Colors.white, fontSize: 12),
                             ))),
                       ),
                     ],

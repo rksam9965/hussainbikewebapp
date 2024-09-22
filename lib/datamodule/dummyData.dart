@@ -5,8 +5,9 @@ class Item {
   String? customer;
   String? mobileNumber;
   String? deliverDate;
-  String? driverDetails;
   String? receiveDate;
+
+  String? driverDetails;
   String? bikeNumber;
   String? diagnosis;
   String? estimateCharges;
@@ -15,27 +16,30 @@ class Item {
   String? phoneNumber;
   String? email;
   String? vat;
-  String? address1;
+  String? selectCustomer;
+  String? selectDriver;
+  String? selectWeek;
 
-  Item({
-    this.name,
-    this.salesman,
-    this.phoneCode,
-    this.customer,
-    this.mobileNumber,
-    this.driverDetails,
-    this.receiveDate,
-    this.bikeNumber,
-    this.diagnosis,
-    this.estimateCharges,
-    this.address,
-    this.outstanding,
-    this.deliverDate,
-    this.phoneNumber,
-    this.email,
-    this.vat,
-    this.address1,
-  });
+  Item(
+      {this.name,
+      this.salesman,
+      this.phoneCode,
+      this.customer,
+      this.mobileNumber,
+      this.driverDetails,
+      this.receiveDate,
+      this.bikeNumber,
+      this.diagnosis,
+      this.estimateCharges,
+      this.address,
+      this.outstanding,
+      this.deliverDate,
+      this.phoneNumber,
+      this.email,
+      this.vat,
+      this.selectCustomer,
+      this.selectDriver,
+      this.selectWeek});
 }
 
 class Item1 {
