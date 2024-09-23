@@ -861,7 +861,7 @@ class HomePageState extends State<HomePage> {
                       children: [
                         Container(
                           // padding: EdgeInsets.symmetric(horizontal: 10,vertical: 10),
-                          height: screenHeight / 18,
+                          // height: screenHeight / 18,
                           width: (screenWidth / 2.5) / 2.05,
                           decoration: BoxDecoration(
                             color: Colors
