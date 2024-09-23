@@ -38,7 +38,6 @@ class HomePageState extends State<HomePage> {
   final TextEditingController vat = TextEditingController();
   var textFieldsDate1 = GlobalKey<DatePickerExampleState>();
   var textFieldsDate2 = GlobalKey<DatePickerExampleState>();
-  html.VideoElement _videoElement = html.VideoElement();
 
   int selectedIndex = 0; // Track the selected screen index
   int selectedIndex1 = 0;
