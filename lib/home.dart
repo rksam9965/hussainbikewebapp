@@ -717,10 +717,22 @@ class HomePageState extends State<HomePage> {
         return Theme(
           data: Theme.of(context).copyWith(dialogBackgroundColor: Colors.white),
           child: AlertDialog(
+            iconPadding: EdgeInsets.only(top: 5, right: 5),
+            icon: Align(
+                alignment: Alignment.centerRight,
+                child: GestureDetector(
+                  child: Icon(
+                    Icons.close,
+                    size: 18,
+                  ),
+                  onTap: () {
+                    Navigator.of(context).pop(); // Close the dialog
+                  },
+                )),
             backgroundColor: appBackGroundColor,
             surfaceTintColor: Colors.transparent,
             shape: const RoundedRectangleBorder(
-              borderRadius: BorderRadius.all(Radius.circular(8.0)),
+              borderRadius: BorderRadius.all(Radius.circular(5.0)),
             ),
             content: SingleChildScrollView(
               child: Column(
@@ -729,10 +741,12 @@ class HomePageState extends State<HomePage> {
                     child: Text(
                       'NEW JOB ORDER',
                       style: TextStyle(
-                          fontWeight: FontWeight.bold, color: Colors.black),
+                          fontWeight: FontWeight.bold,
+                          color: Colors.black,
+                          fontSize: 13),
                     ),
                   ),
-                  SizedBox(height: screenHeight * 0.02),
+                  SizedBox(height: 5),
                   SizedBox(
                       width: screenWidth / 2.5,
                       height: screenHeight / 18,
@@ -860,15 +874,14 @@ class HomePageState extends State<HomePage> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Container(
-                          // padding: EdgeInsets.symmetric(horizontal: 10,vertical: 10),
-                          // height: screenHeight / 18,
+                          height: screenHeight / 18,
                           width: (screenWidth / 2.5) / 2.05,
                           decoration: BoxDecoration(
-                            color: Colors
-                                .transparent, // Set your desired background color here
-                            border: Border.all(
-                                color: textBorderColor,
-                                width: 1), // Border color
+                            color: Colors.transparent,
+                            // Set your desired background color here
+                            border:
+                                Border.all(color: textBorderColor, width: 1),
+                            // Border color
                             borderRadius:
                                 BorderRadius.circular(5), // Rounded corners
                           ),
@@ -982,7 +995,7 @@ class HomePageState extends State<HomePage> {
                           ),
                         ),
                       ]),
-                  SizedBox(height: 15),
+                  SizedBox(height: 5),
                   SizedBox(
                     width: screenWidth / 2.5,
                     height: screenHeight / 18,
@@ -1031,6 +1044,18 @@ class HomePageState extends State<HomePage> {
           child: Stack(
             children: [
               AlertDialog(
+                iconPadding: EdgeInsets.only(top: 5, right: 5),
+                icon: Align(
+                    alignment: Alignment.centerRight,
+                    child: GestureDetector(
+                      child: Icon(
+                        Icons.close,
+                        size: 18,
+                      ),
+                      onTap: () {
+                        Navigator.of(context).pop(); // Close the dialog
+                      },
+                    )),
                 backgroundColor: appBackGroundColor,
                 surfaceTintColor: Colors.transparent,
                 shape: const RoundedRectangleBorder(

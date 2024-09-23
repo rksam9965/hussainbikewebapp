@@ -497,10 +497,22 @@ class CustomerScreen1State extends State<CustomerScreen1> {
         return Theme(
           data: Theme.of(context).copyWith(dialogBackgroundColor: Colors.white),
           child: AlertDialog(
+            iconPadding: EdgeInsets.only(top: 5, right: 5),
+            icon: Align(
+                alignment: Alignment.centerRight,
+                child: GestureDetector(
+                  child: Icon(
+                    Icons.close,
+                    size: 18,
+                  ),
+                  onTap: () {
+                    Navigator.of(context).pop(); // Close the dialog
+                  },
+                )),
             backgroundColor: appBackGroundColor,
             surfaceTintColor: Colors.transparent,
             shape: const RoundedRectangleBorder(
-              borderRadius: BorderRadius.all(Radius.circular(8.0)),
+              borderRadius: BorderRadius.all(Radius.circular(5.0)),
             ),
             content: SingleChildScrollView(
               child: Column(
@@ -834,6 +846,18 @@ class CustomerScreen1State extends State<CustomerScreen1> {
           child: Stack(
             children: [
               AlertDialog(
+                iconPadding: EdgeInsets.only(top: 5, right: 5),
+                icon: Align(
+                    alignment: Alignment.centerRight,
+                    child: GestureDetector(
+                      child: Icon(
+                        Icons.close,
+                        size: 18,
+                      ),
+                      onTap: () {
+                        Navigator.of(context).pop(); // Close the dialog
+                      },
+                    )),
                 backgroundColor: appBackGroundColor,
                 surfaceTintColor: Colors.transparent,
                 shape: const RoundedRectangleBorder(

@@ -62,7 +62,7 @@ class _WorkshopscreenState extends State<Workshopscreen> {
           child: Text(
             '5645',
             style: TextStyle(
-                color: Colors.grey,
+                color: lightGrey,
                 fontWeight: FontWeight.w300,
                 fontSize: 14 // Color of the label text
                 ),
@@ -71,13 +71,13 @@ class _WorkshopscreenState extends State<Workshopscreen> {
       ),
     );
     technicianList.add(
-      const DropdownMenuItem(
+      DropdownMenuItem(
         value: "1",
         child: Center(
           child: Text(
             '123',
             style: TextStyle(
-                color: Colors.grey,
+                color: lightGrey,
                 fontWeight: FontWeight.w300,
                 fontSize: 14 // Color of the label text
                 ),
@@ -86,13 +86,13 @@ class _WorkshopscreenState extends State<Workshopscreen> {
       ),
     );
     technicianList.add(
-      const DropdownMenuItem(
+      DropdownMenuItem(
         value: "2",
         child: Center(
           child: Text(
             "345",
             style: TextStyle(
-                color: Colors.grey,
+                color: lightGrey,
                 fontWeight: FontWeight.w300,
                 fontSize: 14 // Color of the label text
                 ),
@@ -104,13 +104,13 @@ class _WorkshopscreenState extends State<Workshopscreen> {
 
   partsListFunction() {
     partsList.add(
-      const DropdownMenuItem(
+      DropdownMenuItem(
         value: "",
         child: Center(
           child: Text(
             'Parts 1',
             style: TextStyle(
-                color: Colors.grey,
+                color: lightGrey,
                 fontWeight: FontWeight.w300,
                 fontSize: 14 // Color of the label text
                 ),
@@ -119,13 +119,13 @@ class _WorkshopscreenState extends State<Workshopscreen> {
       ),
     );
     partsList.add(
-      const DropdownMenuItem(
+      DropdownMenuItem(
         value: "1",
         child: Center(
           child: Text(
             'Parts 2',
             style: TextStyle(
-                color: Colors.grey,
+                color: lightGrey,
                 fontWeight: FontWeight.w300,
                 fontSize: 14 // Color of the label text
                 ),
@@ -140,7 +140,7 @@ class _WorkshopscreenState extends State<Workshopscreen> {
           child: Text(
             "Parts 3",
             style: TextStyle(
-                color: Colors.grey,
+                color: lightGrey,
                 fontWeight: FontWeight.w300,
                 fontSize: 14 // Color of the label text
                 ),
@@ -210,6 +210,18 @@ class _WorkshopscreenState extends State<Workshopscreen> {
           child: Stack(
             children: [
               AlertDialog(
+                iconPadding: EdgeInsets.only(top: 5, right: 5),
+                icon: Align(
+                    alignment: Alignment.centerRight,
+                    child: GestureDetector(
+                      child: Icon(
+                        Icons.close,
+                        size: 18,
+                      ),
+                      onTap: () {
+                        Navigator.of(context).pop(); // Close the dialog
+                      },
+                    )),
                 backgroundColor: appBackGroundColor,
                 surfaceTintColor: Colors.transparent,
                 shape: const RoundedRectangleBorder(
@@ -252,29 +264,26 @@ class _WorkshopscreenState extends State<Workshopscreen> {
                           ),
                           Align(
                             alignment: Alignment.centerRight,
-                            child: IconButton(
-                              icon: Icon(
-                                color: Colors.black,
-                                Icons.clear,
-                                size: 20,
-                              ),
+                            child: TextButton(
                               onPressed: () {
                                 setState(() {
-                                  _controller.clear();
+                                  _controller.clear(); // Clear the text field
                                 });
                               },
+                              child: Text(
+                                'CLEAR',
+                                style: TextStyle(
+                                  color: Colors.black, // Change text color
+                                  fontSize: 12, // Adjust text size if needed
+                                ),
+                              ),
                             ),
-                          ),
+                          )
                         ],
                       ),
                       SizedBox(height: 8),
                       GestureDetector(
-                        onTap: () => {
-                          submitSignature()
-                          // widget.ontab1!(),
-                          // Navigator.pop(context),
-                          // Navigator.pop(context)
-                        },
+                        onTap: () => {submitSignature()},
                         child: Container(
                             height: screenHeight * 0.08,
                             width: screenWidth / 4,
@@ -1002,7 +1011,7 @@ class _WorkshopscreenState extends State<Workshopscreen> {
                 ),
                 GestureDetector(
                   onTap: () {
-                    signaturePopUp(context);
+                    widget.topbarbutton == true ? {} : signaturePopUp(context);
                   },
                   child: Container(
                     margin: EdgeInsets.only(
