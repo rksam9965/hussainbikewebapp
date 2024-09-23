@@ -67,14 +67,14 @@ class CustomerScreen1State extends State<CustomerScreen1> {
   int passingIndex = 0;
 
   List<DropdownMenuItem<String>> weekList = [];
-  var selectWeek = '';
+  var selectWeek = 'week 1';
 
   List<DropdownMenuItem<String>> customerList = [];
 
   List<DropdownMenuItem<String>> bikeList = [];
-  var selectBikeList = '';
+  var selectBikeList = '5645';
 
-  var selectCustomer = '';
+  var selectCustomer = 'Customer 1';
 
   var receivedate = GlobalKey<DatePickerExampleState>();
   var deliverydate = GlobalKey<DatePickerExampleState>();
@@ -102,13 +102,13 @@ class CustomerScreen1State extends State<CustomerScreen1> {
         widget.items![widget.index!].estimateCharges.toString();
     outstanding.text = widget.items![widget.index!].outstanding.toString();
     address.text = widget.items![widget.index!].address.toString();
-    selectWeek = widget.items![widget.index!].address.toString();
+    selectWeek = widget.items![widget.index!].selectWeek.toString();
     receivedate.currentState?.formattedDate =
         widget.items![widget.index!].receiveDate.toString();
     deliverydate.currentState?.formattedDate =
         widget.items![widget.index!].receiveDate.toString();
     selectCustomer = widget.items![widget.index!].selectCustomer.toString();
-    selectBikeList = widget.items![widget.index!].selectDriver.toString();
+    selectBikeList = widget.items![widget.index!].bikeNumber.toString();
     workerFilter();
     customerFilter();
     bikeNumberFilter();
@@ -123,7 +123,7 @@ class CustomerScreen1State extends State<CustomerScreen1> {
           child: Text(
             'Customer 1',
             style: TextStyle(
-                color: Colors.grey,
+                color: lightGrey,
                 fontWeight: FontWeight.w300,
                 fontSize: 12 // Color of the label text
                 ),
@@ -138,7 +138,7 @@ class CustomerScreen1State extends State<CustomerScreen1> {
           child: Text(
             'Customer 2',
             style: TextStyle(
-                color: Colors.grey,
+                color: lightGrey,
                 fontWeight: FontWeight.w300,
                 fontSize: 12 // Color of the label text
                 ),
@@ -153,7 +153,7 @@ class CustomerScreen1State extends State<CustomerScreen1> {
           child: Text(
             "customer 3",
             style: TextStyle(
-                color: Colors.grey,
+                color: lightGrey,
                 fontWeight: FontWeight.w300,
                 fontSize: 12 // Color of the label text
                 ),
@@ -171,7 +171,7 @@ class CustomerScreen1State extends State<CustomerScreen1> {
           child: Text(
             '5645',
             style: TextStyle(
-                color: Colors.grey,
+                color: lightGrey,
                 fontWeight: FontWeight.w300,
                 fontSize: 12 // Color of the label text
                 ),
@@ -186,7 +186,7 @@ class CustomerScreen1State extends State<CustomerScreen1> {
           child: Text(
             '123',
             style: TextStyle(
-                color: Colors.grey,
+                color: lightGrey,
                 fontWeight: FontWeight.w300,
                 fontSize: 12 // Color of the label text
                 ),
@@ -203,7 +203,7 @@ class CustomerScreen1State extends State<CustomerScreen1> {
             child: Text(
               "345",
               style: TextStyle(
-                  color: Colors.grey,
+                  color: lightGrey,
                   fontWeight: FontWeight.w300,
                   fontSize: 12 // Color of the label text
                   ),
@@ -216,13 +216,13 @@ class CustomerScreen1State extends State<CustomerScreen1> {
 
   workerFilter() {
     weekList.add(
-      const DropdownMenuItem(
+      DropdownMenuItem(
         value: "week 1",
         child: Center(
           child: Text(
             'week 1',
             style: TextStyle(
-              color: Colors.black,
+              color: lightGrey,
               fontSize: 12, // Set font size to 20
               fontWeight: FontWeight.normal, // Set font weight to bold
             ),
@@ -231,13 +231,13 @@ class CustomerScreen1State extends State<CustomerScreen1> {
       ),
     );
     weekList.add(
-      const DropdownMenuItem(
+      DropdownMenuItem(
         value: "week 2",
         child: Center(
           child: Text(
             'week 2',
             style: TextStyle(
-              color: Colors.black,
+              color: lightGrey,
               fontSize: 12, // Set font size to 20
               fontWeight: FontWeight.normal, // Set font weight to bold
             ),
@@ -246,13 +246,13 @@ class CustomerScreen1State extends State<CustomerScreen1> {
       ),
     );
     weekList.add(
-      const DropdownMenuItem(
+      DropdownMenuItem(
         value: "week 3",
         child: Center(
           child: Text(
             "week 3",
             style: TextStyle(
-              color: Colors.black,
+              color: lightGrey,
               fontSize: 12, // Set font size to 20
               fontWeight: FontWeight.normal, // Set font weight to bold
             ),
@@ -782,14 +782,12 @@ class CustomerScreen1State extends State<CustomerScreen1> {
                         Item updatedItem = Item(
                           salesman: salesman.text,
                           name: name.text,
-                          deliverDate: textFieldsDate1
-                              .currentState?.formattedDate
+                          deliverDate: deliverydate.currentState?.formattedDate
                               .toString(),
                           phoneCode: phoneCode.text,
                           customer: selectCustomer.toString(),
                           mobileNumber: mobileNumber.text,
-                          receiveDate: textFieldsDate2
-                              .currentState?.formattedDate
+                          receiveDate: receivedate.currentState?.formattedDate
                               .toString(),
                           driverDetails: driverDetails.text,
                           bikeNumber: selectBikeList.toString(),

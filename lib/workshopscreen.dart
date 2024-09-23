@@ -1,12 +1,19 @@
+import 'dart:io';
 import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:hussainbikewebapp/utils/colors.dart';
 import 'package:hussainbikewebapp/widget/date_picker.dart';
 import 'package:signature/signature.dart';
 import 'dart:ui' as ui;
+import 'package:flutter/foundation.dart' show kIsWeb;
+
 import 'package:flutter_svg/svg.dart';
+import 'package:image_picker/image_picker.dart';
 
 import 'Textfield.dart';
+import 'dart:html' as html; // Import HTML for web-specific file handling
+import 'package:flutter/foundation.dart'; // kIsWeb flag
+
 import 'datamodule/dummyData.dart';
 
 class Workshopscreen extends StatefulWidget {
@@ -36,6 +43,69 @@ class _WorkshopscreenState extends State<Workshopscreen> {
   bool kk = false;
   late SignatureController _controller;
 
+  File? _selectedFile;
+  final ImagePicker _picker = ImagePicker();
+
+  Future<void> _pickFile() async {
+    try {
+      final XFile? pickedFile =
+          await _picker.pickImage(source: ImageSource.gallery);
+
+      if (pickedFile != null) {
+        setState(() {
+          _selectedFile = File(pickedFile.path);
+        });
+      }
+    } catch (e) {
+      // Handle any errors that might occur
+      print('Error picking file: $e');
+    }
+  }
+
+  Uint8List? webImage; // For web
+
+  // Future<void> _captureImage() async {
+  //   try {
+  //     if (kIsWeb) {
+  //       // Create an HTML input element
+  //       // Create an HTML input element
+  //       final html.InputElement uploadInput = html.FileUploadInputElement()
+  //         ..accept = 'image/*'
+  //         ..setAttribute('capture',
+  //             'environment'); // Use 'environment' for back camera, or 'user' for front camera
+  //
+  //       // Trigger the file picker
+  //       uploadInput.click();
+  //
+  //       // Listen for changes
+  //       uploadInput.onChange.listen((e) async {
+  //         final files = uploadInput.files;
+  //         if (files!.isEmpty) return;
+  //
+  //         final reader = html.FileReader();
+  //         reader.readAsArrayBuffer(files[0]);
+  //         reader.onLoadEnd.listen((e) {
+  //           setState(() {
+  //             webImage = reader.result as Uint8List; // Save image bytes
+  //           });
+  //         });
+  //       });
+  //     } else {
+  //       // For mobile platforms (Android/iOS)
+  //       final XFile? capturedFile =
+  //           await _picker.pickImage(source: ImageSource.camera);
+  //
+  //       if (capturedFile != null) {
+  //         setState(() {
+  //           _selectedFile = File(capturedFile.path);
+  //         });
+  //       }
+  //     }
+  //   } catch (e) {
+  //     print('Error capturing image: $e');
+  //   }
+  // }
+
   @override
   void initState() {
     technicianListFunction();
@@ -60,7 +130,7 @@ class _WorkshopscreenState extends State<Workshopscreen> {
         value: "",
         child: Center(
           child: Text(
-            '5645',
+            'Technician 1',
             style: TextStyle(
                 color: lightGrey,
                 fontWeight: FontWeight.w300,
@@ -75,7 +145,7 @@ class _WorkshopscreenState extends State<Workshopscreen> {
         value: "1",
         child: Center(
           child: Text(
-            '123',
+            'Technician 2',
             style: TextStyle(
                 color: lightGrey,
                 fontWeight: FontWeight.w300,
@@ -90,7 +160,7 @@ class _WorkshopscreenState extends State<Workshopscreen> {
         value: "2",
         child: Center(
           child: Text(
-            "345",
+            "Technician 3",
             style: TextStyle(
                 color: lightGrey,
                 fontWeight: FontWeight.w300,
@@ -853,6 +923,9 @@ class _WorkshopscreenState extends State<Workshopscreen> {
                             children: [
                               GestureDetector(
                                 onTap: () {
+                                  // Navigator.of(context).pop();
+                                  _pickFile();
+
                                   // Action when the button is tapped
                                 },
                                 child: Container(
@@ -897,6 +970,8 @@ class _WorkshopscreenState extends State<Workshopscreen> {
                               ),
                               GestureDetector(
                                 onTap: () {
+                                  // captureImage();
+
                                   // Action when the button is tapped
                                   print("SVG Button tapped");
                                 },

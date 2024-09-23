@@ -120,7 +120,8 @@ class CustomTextField extends StatefulWidget {
     this.commentText,
     this.icon,
     this.editable,
-    this.display, this.popup,
+    this.display,
+    this.popup,
   }) : super(key: key);
 
   @override
@@ -155,7 +156,6 @@ class _CustomTextFieldState extends State<CustomTextField> {
             border: InputBorder.none,
             labelText: widget.lable,
             // contentPadding: EdgeInsets.symmetric(vertical: 8.0, horizontal: 10.0), // Adjust vertical padding
-
             contentPadding: widget.popup == true?EdgeInsets.symmetric(vertical: 8.0, horizontal: 10.0):
                 EdgeInsets.only(left: 24, top: 10, bottom: 20, right: 24),
             labelStyle: TextStyle(

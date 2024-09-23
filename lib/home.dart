@@ -7,6 +7,7 @@ import 'package:hussainbikewebapp/widget/gesturebutton.dart';
 import 'package:flutter_svg/svg.dart';
 import 'Textfield.dart';
 import 'side_screen.dart';
+import 'dart:html' as html;
 import 'datamodule/dummyData.dart';
 
 class HomePage extends StatefulWidget {
@@ -37,6 +38,7 @@ class HomePageState extends State<HomePage> {
   final TextEditingController vat = TextEditingController();
   var textFieldsDate1 = GlobalKey<DatePickerExampleState>();
   var textFieldsDate2 = GlobalKey<DatePickerExampleState>();
+  html.VideoElement _videoElement = html.VideoElement();
 
   int selectedIndex = 0; // Track the selected screen index
   int selectedIndex1 = 0;
@@ -141,6 +143,9 @@ class HomePageState extends State<HomePage> {
         deliverDate: textFieldsDate1.currentState!.formattedDate,
         receiveDate: textFieldsDate2.currentState?.formattedDate,
         salesman: salesman.text,
+        selectWeek: selectWeek.toString(),
+        selectCustomer: selectCustomer.toString(),
+        selectDriver: selectBikeList.toString(),
         phoneCode: phoneCode.text,
         customer: selectCustomer.toString(),
         mobileNumber: mobileNumber.text,

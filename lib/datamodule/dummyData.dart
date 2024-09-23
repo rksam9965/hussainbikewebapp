@@ -6,7 +6,6 @@ class Item {
   String? mobileNumber;
   String? deliverDate;
   String? receiveDate;
-
   String? driverDetails;
   String? bikeNumber;
   String? diagnosis;
