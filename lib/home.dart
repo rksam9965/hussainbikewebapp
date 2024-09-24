@@ -389,7 +389,7 @@ class HomePageState extends State<HomePage> {
                 children: [
                   Container(
                     // / 4.067
-                    width: screenWidth / 4.067,
+                    // width: screenWidth / 4.067,
                     height: size.height / 0.8125,
                     color: homeScreenBackgroundContainerColor,
                     margin: const EdgeInsets.only(top: 30),
