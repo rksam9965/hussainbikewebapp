@@ -11,7 +11,6 @@ import 'package:flutter_svg/svg.dart';
 import 'package:image_picker/image_picker.dart';
 
 import 'Textfield.dart';
-import 'dart:html' as html; // Import HTML for web-specific file handling
 import 'package:flutter/foundation.dart'; // kIsWeb flag
 
 import 'datamodule/dummyData.dart';
