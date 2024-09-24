@@ -19,6 +19,7 @@ class SignInPageState extends State<SignInPage> {
   Widget build(BuildContext context) {
     var screenWidth = MediaQuery.of(context).size.width;
     var screenHeight = MediaQuery.of(context).size.height;
+
     return Container(
       color: appBackGroundColor,
       child: SafeArea(
@@ -41,44 +42,12 @@ class SignInPageState extends State<SignInPage> {
   void validateSignIn() {
     if (textFieldsKey.currentState!.userName.text == '') {
       displayAlert(context, GlobalKey(), 'Please enter a user name');
-    } else {
-      submitSignInData();
-    }
+    } else {}
   }
 
   String? username;
   String? profileLink;
   String? localId;
-
-  Future<void> submitSignInData() async {
-    // var jsonData = getSigninData();
-    // displayProgress(context);
-    // fetchRegisterTicket(jsonData).then((Authenticate authenticateData) {
-    //   hideProgress(context);
-    //   if (authenticateData.accessToken!.isNotEmpty) {
-    //     bool? isadmin = authenticateData.isAdmin;
-    //     username = authenticateData.username;
-    //     profileLink = authenticateData.profileLink;
-    //     localId = authenticateData.id.toString();
-    //     createUser(isadmin);
-    //     pushToHomePage();
-    //   } else {
-    //     displayAlert(context, GlobalKey(), '');
-    //     if (authenticateData.accessToken!.isEmpty) {
-    //       Future.delayed(Duration(milliseconds: 800), () {
-    //         hideProgress(context);
-    //         popWindow();
-    //       });
-    //     }
-    //   }
-    // }).catchError((error, stackTrace) {
-    //   debugPrint(error.toString());
-    //   debugPrint(stackTrace.toString());
-    //   hideProgress(context);
-    //   displayAlert(context, GlobalKey(), error.toString());
-    // });
-  }
-
   var imman;
 
   Future<void> createUser(bool? isadmin) async {
