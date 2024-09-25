@@ -34,3 +34,15 @@ class Responsive extends StatelessWidget {
     }
   }
 }
+
+enum DeviceType { desktop, tablet, mobile }
+
+DeviceType getDeviceType(BuildContext context) {
+  if (Responsive.isDesktop(context)) {
+    return DeviceType.desktop;
+  } else if (Responsive.isTablet(context)) {
+    return DeviceType.tablet;
+  } else {
+    return DeviceType.mobile;
+  }
+}

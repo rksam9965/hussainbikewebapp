@@ -3,6 +3,7 @@ import 'package:hussainbikewebapp/signin/signin_button.dart';
 import 'package:hussainbikewebapp/signin/signin_text_field.dart';
 import 'package:flutter_svg/svg.dart';
 import '../../utils/colors.dart';
+import '../responsive.dart';
 
 class SignInContentView extends StatefulWidget {
   final Function validateSignIn;
@@ -33,62 +34,127 @@ class SignInContentViewState extends State<SignInContentView> {
     var screenWidth = MediaQuery.of(context).size.width;
     var screenHeight = MediaQuery.of(context).size.height;
 
-    return Container(
-      width: MediaQuery.of(context).size.width,
-      child: SingleChildScrollView(
-        child: Column(
-          children: [
-            Container(
-              margin: EdgeInsets.only(
-                top: screenHeight * 0.15,
-              ),
-              width: 300, // Width of the Container
-              height: 200, // Height of the Container
-              child: SvgPicture.asset(
-                'assets/logo.svg',
-                width:
-                    500, // Width of the SvgPicture should match the Container
-                height:
-                    500, // Height of the SvgPicture should match the Container
-                fit: BoxFit.contain, // Ensure the SvgPicture scales correctly
-              ),
-            ),
-            const SizedBox(
-              height: 20,
-            ),
-            SizedBox(
-              width: MediaQuery.of(context).size.width / 4,
-              child: Center(
-                child: Column(
-                  children: [
-                    SignInTextField(
-                        borderColor: borderColor,
-                        key: widget.textFieldsKey,
-                        top: totalHeight * 0,
-                        text: ""),
-                    const SizedBox(
-                      height: 14,
+    return Responsive.isTablet(context)
+        ? SizedBox(
+            width: MediaQuery.of(context).size.width,
+            child: SingleChildScrollView(
+              child: Column(
+                children: [
+                  Container(
+                    margin: EdgeInsets.only(
+                      top: screenHeight * 0.225,
                     ),
-                    SignInSubmitButton(
-                      newone: true,
-                      borderColor: borderColor,
-                      textColor: textHeadingColor,
-                      fontSize: 16,
-                      fontWeight: FontWeight.w400,
-                      text: "LOGIN",
-                      color: Colors.transparent,
-                      validateSignIn: widget.validateSignIn,
+                    width: screenWidth * 0.375, // Width of the Container
+                    height: 250, // Height of the Container
+                    child: SvgPicture.asset(
+                      'assets/logo.svg',
+                      width:
+                          500, // Width of the SvgPicture should match the Container
+                      height:
+                          500, // Height of the SvgPicture should match the Container
+                      fit: BoxFit
+                          .contain, // Ensure the SvgPicture scales correctly
                     ),
-                  ],
-                ),
+                  ),
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  SizedBox(
+                    width: MediaQuery.of(context).size.width / 2.5,
+                    child: Center(
+                      child: Column(
+                        children: [
+                          SignInTextField(
+                              borderColor: borderColor,
+                              key: widget.textFieldsKey,
+                              top: totalHeight * 0,
+                              text: ""),
+                          const SizedBox(
+                            height: 14,
+                          ),
+                          SignInSubmitButton(
+                            newone: true,
+                            borderColor: borderColor,
+                            textColor: textHeadingColor,
+                            fontSize: 16,
+                            fontWeight: FontWeight.w400,
+                            text: "LOGIN",
+                            color: Colors.transparent,
+                            validateSignIn: widget.validateSignIn,
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                ],
               ),
             ),
-            const SizedBox(
-              height: 10,
+          )
+        : Container(
+            width: MediaQuery.of(context).size.width,
+            child: SingleChildScrollView(
+              child: Column(
+                children: [
+                  if (Responsive.isTablet(context))
+                    Container()
+                  else
+                    Container(
+                      margin: EdgeInsets.only(
+                        top: Responsive.isTablet(context)
+                            ? screenHeight * 0.20
+                            : screenHeight * 0.15,
+                      ),
+                      width: 300, // Width of the Container
+                      height: 200, // Height of the Container
+                      child: SvgPicture.asset(
+                        'assets/logo.svg',
+                        width:
+                            500, // Width of the SvgPicture should match the Container
+                        height:
+                            500, // Height of the SvgPicture should match the Container
+                        fit: BoxFit
+                            .contain, // Ensure the SvgPicture scales correctly
+                      ),
+                    ),
+                  const SizedBox(
+                    height: 20,
+                  ),
+                  SizedBox(
+                    width: MediaQuery.of(context).size.width / 4,
+                    child: Center(
+                      child: Column(
+                        children: [
+                          SignInTextField(
+                              borderColor: borderColor,
+                              key: widget.textFieldsKey,
+                              top: totalHeight * 0,
+                              text: ""),
+                          const SizedBox(
+                            height: 14,
+                          ),
+                          SignInSubmitButton(
+                            newone: true,
+                            borderColor: borderColor,
+                            textColor: textHeadingColor,
+                            fontSize: 16,
+                            fontWeight: FontWeight.w400,
+                            text: "LOGIN",
+                            color: Colors.transparent,
+                            validateSignIn: widget.validateSignIn,
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                ],
+              ),
             ),
-          ],
-        ),
-      ),
-    );
+          );
   }
 }

@@ -1,5 +1,6 @@
 import 'dart:typed_data';
 import 'package:flutter/material.dart';
+import 'package:hussainbikewebapp/responsive.dart';
 import 'package:hussainbikewebapp/utils/colors.dart';
 import 'package:hussainbikewebapp/widget/bottom_gesture_button.dart';
 import 'package:hussainbikewebapp/widget/date_picker.dart';
@@ -267,209 +268,437 @@ class CustomerScreen1State extends State<CustomerScreen1> {
     Size size = MediaQuery.of(context).size;
     var screenWidth = MediaQuery.of(context).size.width;
     var screenHeight = MediaQuery.of(context).size.height;
+    var widthSize = screenWidth * 1.5;
     return Container(
+      // width: widthSize,
       height: size.height / 0.8125,
       color: homeScreenContainerColor,
-      margin: const EdgeInsets.only(
-        top: 30,
-        // right: 24,
+      margin: EdgeInsets.only(
+        top: Responsive.isTablet(context) ? 6 : 30,
       ),
-      padding: const EdgeInsets.only(
-        left: 24,
-        right: 24,
+      padding: EdgeInsets.only(
+        left: screenWidth * 0.02,
+        right: screenWidth * 0.02,
       ),
       child: SingleChildScrollView(
-        child: Column(
-          children: [
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Container(
-                    margin: EdgeInsets.only(
-                      top: 10,
-                      left: screenWidth * 0.28,
+        child: Responsive.isTablet(context)
+            ? Column(
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Container(
+                          margin: EdgeInsets.only(
+                            top: 20,
+                            left: (screenWidth * 0.28 - screenWidth * 0.02),
+                          ),
+                          child: Center(child: Text('JOB ORDER'))),
+                      Visibility(
+                          visible: widget.selectedIndex == 1 ||
+                                  widget.selectedIndex == 2
+                              ? false
+                              : true,
+                          child: GestureDetector(
+                            onTap: () {
+                              showPopup(context, false, widget.index);
+                            },
+                            child: Container(
+                              margin: EdgeInsets.only(
+                                top: 20,
+                              ),
+                              width: 40,
+                              height: 40,
+                              child: SvgPicture.asset(
+                                'assets/Icons/edit_icon.svg', // Path to your SVG file
+                                fit: BoxFit.contain, // Adjust the fit as needed
+                              ),
+                            ),
+                          ))
+                    ],
+                  ),
+                  SizedBox(height: screenHeight * 0.05),
+                  const SizedBox(height: 16),
+                  TextFieldFunction(
+                    "Salesman",
+                    salesman,
+                    true,
+                  ),
+                  SizedBox(height: screenHeight * 0.015),
+                  TextFieldFunction("Phone Code", phoneCode, true),
+                  SizedBox(height: screenHeight * 0.015),
+                  SizedBox(
+                    height: 50,
+                    child: Row(
+                        // mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Expanded(
+                            flex: 2,
+                            // width: screenWidth / 3.045,
+                            child: DatePickerExample(
+                              disable: disable,
+                              key: receivedate,
+                              label: "Receive Date",
+                              text: receiveDate.text.toString(),
+                            ),
+                          ),
+                          SizedBox(
+                            width: screenWidth * 0.02,
+                          ),
+                          Expanded(
+                            flex: 2,
+                            // width: screenWidth / 3.045,
+                            child: DatePickerExample(
+                              disable: disable,
+                              key: deliverydate,
+                              label: "Delivery Date",
+                              text: deliveryDate.text.toString(),
+                            ),
+                          ),
+                        ]),
+                  ),
+                  SizedBox(height: screenHeight * 0.015),
+                  TextFieldFunction("Customer", customer, true),
+                  SizedBox(height: screenHeight * 0.015),
+                  TextFieldFunction("Mobile Number", mobileNumber, true),
+                  SizedBox(height: screenHeight * 0.015),
+                  TextFieldFunction(
+                    "Driver Details",
+                    driverDetails,
+                    true,
+                  ),
+                  SizedBox(height: screenHeight * 0.015),
+                  Row(children: [
+                    Expanded(
+                      flex: 2,
+                      child: CustomTextField(
+                        display: display,
+                        filledColor: Colors.grey.shade300,
+                        borderColor: Colors.grey,
+                        lable: 'Bike Number',
+                        controller: bikeNumber,
+                      ),
                     ),
-                    child: Text('JOB ORDER')),
-                Visibility(
-                    visible:
-                        widget.selectedIndex == 1 || widget.selectedIndex == 2
-                            ? false
-                            : true,
-                    child: GestureDetector(
-                      onTap: () {
-                        showPopup(context, false, widget.index);
-                      },
-                      child: Container(
-                        margin: EdgeInsets.only(
-                          top: 10,
-                        ),
-                        width: 40,
-                        height: 40,
-                        child: SvgPicture.asset(
-                          'assets/Icons/edit_icon.svg', // Path to your SVG file
-                          fit: BoxFit.contain, // Adjust the fit as needed
+                    SizedBox(
+                      width: screenWidth * 0.02,
+                    ),
+                    Expanded(
+                      flex: 2,
+                      child: CustomTextField(
+                        display: display,
+                        filledColor: Colors.grey.shade300,
+                        borderColor: Colors.grey,
+                        lable: 'Address 1,Address, ...',
+                        controller: address,
+                      ),
+                    ),
+                  ]),
+                  SizedBox(height: screenHeight * 0.015),
+                  CustomTextField(
+                    display: display,
+                    filledColor: Colors.grey.shade300,
+                    borderColor: Colors.grey,
+                    maxLines: 4,
+                    lable: 'Diagnosis',
+                    controller: diagnosis,
+                  ),
+                  SizedBox(height: screenHeight * 0.015),
+                  Row(children: [
+                    Expanded(
+                      flex: 2,
+                      child: CustomTextField(
+                        display: display,
+                        filledColor: Colors.grey.shade300,
+                        borderColor: Colors.grey,
+                        lable: 'Estimate Charges',
+                        controller: estimateCharges,
+                      ),
+                    ),
+                    SizedBox(
+                      width: screenWidth * 0.02,
+                    ),
+                    Expanded(
+                      flex: 2,
+                      child: CustomTextField(
+                        display: display,
+                        filledColor: Colors.grey.shade300,
+                        borderColor: Colors.grey,
+                        lable: 'Outstanding',
+                        controller: outstanding,
+                      ),
+                    ),
+                  ]),
+                  SizedBox(height: screenHeight * 0.015),
+                  if (signature != null)
+                    if (widget.selectedIndex == 1)
+                      Align(
+                        alignment: Alignment.centerRight,
+                        child: Container(
+                          color: homeScreenContainerColor,
+                          child: Image.memory(
+                              height: 50,
+                              signature!), // Display the captured signature
                         ),
                       ),
-                    ))
-              ],
-            ),
-            SizedBox(height: screenHeight * 0.05),
-            const SizedBox(height: 16),
-            TextFieldFunction(
-              "Salesman",
-              salesman,
-              true,
-            ),
-            SizedBox(height: screenHeight * 0.015),
-            TextFieldFunction("Phone Code", phoneCode, true),
-            SizedBox(height: screenHeight * 0.015),
-            Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-              SizedBox(
-                width: screenWidth / 3.045,
-                child: DatePickerExample(
-                  disable: disable,
-                  key: receivedate,
-                  label: "Receive Date",
-                  text: receiveDate.text.toString(),
-                ),
-              ),
-              SizedBox(
-                width: screenWidth / 3.045,
-                child: DatePickerExample(
-                  disable: disable,
-                  key: deliverydate,
-                  label: "Delivery Date",
-                  text: deliveryDate.text.toString(),
-                ),
-              ),
-            ]),
-            SizedBox(height: screenHeight * 0.015),
-            TextFieldFunction("Customer", customer, true),
-            SizedBox(height: screenHeight * 0.015),
-            TextFieldFunction("Mobile Number", mobileNumber, true),
-            SizedBox(height: screenHeight * 0.015),
-            TextFieldFunction(
-              "Driver Details",
-              driverDetails,
-              true,
-            ),
-            SizedBox(height: screenHeight * 0.015),
-            Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-              Container(
-                width: screenWidth / 3.045,
-                child: CustomTextField(
-                  display: display,
-                  filledColor: Colors.grey.shade300,
-                  borderColor: Colors.grey,
-                  lable: 'Bike Number',
-                  controller: bikeNumber,
-                ),
-              ),
-              SizedBox(
-                width: screenWidth / 3.045,
-                child: CustomTextField(
-                  display: display,
-                  filledColor: Colors.grey.shade300,
-                  borderColor: Colors.grey,
-                  lable: 'Address 1,Address, ...',
-                  controller: address,
-                ),
-              ),
-            ]),
-            SizedBox(height: screenHeight * 0.015),
-            CustomTextField(
-              display: display,
-              filledColor: Colors.grey.shade300,
-              borderColor: Colors.grey,
-              maxLines: 4,
-              lable: 'Diagnosis',
-              controller: diagnosis,
-            ),
-            SizedBox(height: screenHeight * 0.015),
-            Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-              Container(
-                width: screenWidth / 3.045,
-                child: CustomTextField(
-                  display: display,
-                  filledColor: Colors.grey.shade300,
-                  borderColor: Colors.grey,
-                  lable: 'Estimate Charges',
-                  controller: estimateCharges,
-                ),
-              ),
-              Container(
-                width: screenWidth / 3.045,
-                child: CustomTextField(
-                  display: display,
-                  filledColor: Colors.grey.shade300,
-                  borderColor: Colors.grey,
-                  lable: 'Outstanding',
-                  controller: outstanding,
-                ),
-              ),
-            ]),
-            SizedBox(height: screenHeight * 0.015),
-            if (signature != null)
-              if (widget.selectedIndex == 1)
-                Align(
-                  alignment: Alignment.centerRight,
-                  child: Container(
-                    color: homeScreenContainerColor,
-                    child: Image.memory(
-                        height: 50,
-                        signature!), // Display the captured signature
+                  SizedBox(height: screenHeight * 0.08),
+                  Row(children: [
+                    Visibility(
+                      visible: widget.selectedIndex == 0 ? true : false,
+                      child: Expanded(
+                        flex: 2,
+                        child: BottomGestureButton(
+                          cancel: cancel,
+                          navigationFunction1: widget.ontab,
+                          text: "CANCEL",
+                          textColor: Colors.black,
+                          color: Colors.transparent,
+                        ),
+                      ),
+                    ),
+                    // GestureDetector(
+                    //   onTap: () => navigationFunction!(),
+                    //   child: Container(
+                    //       height: 50,
+                    //       decoration: BoxDecoration(
+                    //         border: Border.all(
+                    //           color:
+                    //           floatingButtonColor, // Set your desired border color here
+                    //           width: 1, // Set the width of the border
+                    //         ),
+                    //         color: floatingButtonColor,
+                    //         borderRadius: BorderRadius.circular(10),
+                    //       ),
+                    //       // padding: cowidgetnst EdgeInsets.symmetric(vertical: 15, horizontal: 30),
+                    //       child: Center(
+                    //           child: Text(
+                    //             "GO TO WORKSHOP",
+                    //             style: TextStyle(color: Colors.white),
+                    //           ))),
+                    // )
+                    Visibility(
+                      visible: widget.selectedIndex == 0 ? true : false,
+                      child: SizedBox(
+                        width: screenWidth * 0.02,
+                      ),
+                    ),
+                    Expanded(
+                      flex: 2,
+                      child: BottomGestureButton(
+                        topbarbutton: widget.selectedIndex == 1 ||
+                                widget.selectedIndex == 2
+                            ? true
+                            : false,
+                        selectedIndexRow: widget.selectedIndex,
+                        textColor: Colors.white,
+                        text: "GO TO WORKSHOP",
+                        navigationFunction: navigationFunction,
+                        color: floatingButtonColor,
+                      ),
+                    ),
+                  ]),
+                  SizedBox(
+                    height: 20,
+                  )
+                ],
+              )
+            : Column(
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Container(
+                          margin: EdgeInsets.only(
+                            top: 10,
+                            left: screenWidth * 0.28,
+                          ),
+                          child: Text('JOB ORDER')),
+                      Visibility(
+                          visible: widget.selectedIndex == 1 ||
+                                  widget.selectedIndex == 2
+                              ? false
+                              : true,
+                          child: GestureDetector(
+                            onTap: () {
+                              showPopup(context, false, widget.index);
+                            },
+                            child: Container(
+                              margin: EdgeInsets.only(
+                                top: 10,
+                              ),
+                              width: 40,
+                              height: 40,
+                              child: SvgPicture.asset(
+                                'assets/Icons/edit_icon.svg', // Path to your SVG file
+                                fit: BoxFit.contain, // Adjust the fit as needed
+                              ),
+                            ),
+                          ))
+                    ],
                   ),
-                ),
-            SizedBox(height: screenHeight * 0.08),
-            Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-              Visibility(
-                visible: widget.selectedIndex == 0 ? true : false,
-                child: BottomGestureButton(
-                  cancel: cancel,
-                  navigationFunction1: widget.ontab,
-                  text: "CANCEL",
-                  textColor: Colors.black,
-                  color: Colors.transparent,
-                ),
-              ),
+                  SizedBox(height: screenHeight * 0.05),
+                  const SizedBox(height: 16),
+                  TextFieldFunction(
+                    "Salesman",
+                    salesman,
+                    true,
+                  ),
+                  SizedBox(height: screenHeight * 0.015),
+                  TextFieldFunction("Phone Code", phoneCode, true),
+                  SizedBox(height: screenHeight * 0.015),
+                  Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        SizedBox(
+                          width: screenWidth / 3.045,
+                          child: DatePickerExample(
+                            disable: disable,
+                            key: receivedate,
+                            label: "Receive Date",
+                            text: receiveDate.text.toString(),
+                          ),
+                        ),
+                        SizedBox(
+                          width: screenWidth / 3.045,
+                          child: DatePickerExample(
+                            disable: disable,
+                            key: deliverydate,
+                            label: "Delivery Date",
+                            text: deliveryDate.text.toString(),
+                          ),
+                        ),
+                      ]),
+                  SizedBox(height: screenHeight * 0.015),
+                  TextFieldFunction("Customer", customer, true),
+                  SizedBox(height: screenHeight * 0.015),
+                  TextFieldFunction("Mobile Number", mobileNumber, true),
+                  SizedBox(height: screenHeight * 0.015),
+                  TextFieldFunction(
+                    "Driver Details",
+                    driverDetails,
+                    true,
+                  ),
+                  SizedBox(height: screenHeight * 0.015),
+                  Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Container(
+                          width: screenWidth / 3.045,
+                          child: CustomTextField(
+                            display: display,
+                            filledColor: Colors.grey.shade300,
+                            borderColor: Colors.grey,
+                            lable: 'Bike Number',
+                            controller: bikeNumber,
+                          ),
+                        ),
+                        SizedBox(
+                          width: screenWidth / 3.045,
+                          child: CustomTextField(
+                            display: display,
+                            filledColor: Colors.grey.shade300,
+                            borderColor: Colors.grey,
+                            lable: 'Address 1,Address, ...',
+                            controller: address,
+                          ),
+                        ),
+                      ]),
+                  SizedBox(height: screenHeight * 0.015),
+                  CustomTextField(
+                    display: display,
+                    filledColor: Colors.grey.shade300,
+                    borderColor: Colors.grey,
+                    maxLines: 4,
+                    lable: 'Diagnosis',
+                    controller: diagnosis,
+                  ),
+                  SizedBox(height: screenHeight * 0.015),
+                  Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Container(
+                          width: screenWidth / 3.045,
+                          child: CustomTextField(
+                            display: display,
+                            filledColor: Colors.grey.shade300,
+                            borderColor: Colors.grey,
+                            lable: 'Estimate Charges',
+                            controller: estimateCharges,
+                          ),
+                        ),
+                        Container(
+                          width: screenWidth / 3.045,
+                          child: CustomTextField(
+                            display: display,
+                            filledColor: Colors.grey.shade300,
+                            borderColor: Colors.grey,
+                            lable: 'Outstanding',
+                            controller: outstanding,
+                          ),
+                        ),
+                      ]),
+                  SizedBox(height: screenHeight * 0.015),
+                  if (signature != null)
+                    if (widget.selectedIndex == 1)
+                      Align(
+                        alignment: Alignment.centerRight,
+                        child: Container(
+                          color: homeScreenContainerColor,
+                          child: Image.memory(
+                              height: 50,
+                              signature!), // Display the captured signature
+                        ),
+                      ),
+                  SizedBox(height: screenHeight * 0.08),
+                  Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Visibility(
+                          visible: widget.selectedIndex == 0 ? true : false,
+                          child: BottomGestureButton(
+                            cancel: cancel,
+                            navigationFunction1: widget.ontab,
+                            text: "CANCEL",
+                            textColor: Colors.black,
+                            color: Colors.transparent,
+                          ),
+                        ),
 
-              // GestureDetector(
-              //   onTap: () => navigationFunction!(),
-              //   child: Container(
-              //       height: 50,
-              //       decoration: BoxDecoration(
-              //         border: Border.all(
-              //           color:
-              //           floatingButtonColor, // Set your desired border color here
-              //           width: 1, // Set the width of the border
-              //         ),
-              //         color: floatingButtonColor,
-              //         borderRadius: BorderRadius.circular(10),
-              //       ),
-              //       // padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 30),
-              //       child: Center(
-              //           child: Text(
-              //             "GO TO WORKSHOP",
-              //             style: TextStyle(color: Colors.white),
-              //           ))),
-              // )
-              BottomGestureButton(
-                topbarbutton:
-                    widget.selectedIndex == 1 || widget.selectedIndex == 2
-                        ? true
-                        : false,
-                selectedIndexRow: widget.selectedIndex,
-                textColor: Colors.white,
-                text: "GO TO WORKSHOP",
-                navigationFunction: navigationFunction,
-                color: floatingButtonColor,
+                        // GestureDetector(
+                        //   onTap: () => navigationFunction!(),
+                        //   child: Container(
+                        //       height: 50,
+                        //       decoration: BoxDecoration(
+                        //         border: Border.all(
+                        //           color:
+                        //           floatingButtonColor, // Set your desired border color here
+                        //           width: 1, // Set the width of the border
+                        //         ),
+                        //         color: floatingButtonColor,
+                        //         borderRadius: BorderRadius.circular(10),
+                        //       ),
+                        //       // padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 30),
+                        //       child: Center(
+                        //           child: Text(
+                        //             "GO TO WORKSHOP",
+                        //             style: TextStyle(color: Colors.white),
+                        //           ))),
+                        // )
+                        BottomGestureButton(
+                          topbarbutton: widget.selectedIndex == 1 ||
+                                  widget.selectedIndex == 2
+                              ? true
+                              : false,
+                          selectedIndexRow: widget.selectedIndex,
+                          textColor: Colors.white,
+                          text: "GO TO WORKSHOP",
+                          navigationFunction: navigationFunction,
+                          color: floatingButtonColor,
+                        ),
+                      ]),
+                  SizedBox(
+                    height: 10,
+                  )
+                ],
               ),
-            ]),
-            SizedBox(
-              height: 20,
-            )
-          ],
-        ),
       ),
     );
   }
@@ -539,28 +768,49 @@ class CustomerScreen1State extends State<CustomerScreen1> {
                   SizedBox(
                     height: 5,
                   ),
-                  Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        SizedBox(
-                          height: screenHeight / 18,
-                          width: (screenWidth / 2.5) / 2.05,
-                          child: DatePickerExample(
-                            key: deliverydate,
-                            label: deliveryDate.text.toString(),
-                            text: deliveryDate.text.toString(),
-                          ),
-                        ),
-                        SizedBox(
-                          height: screenHeight / 18,
-                          width: (screenWidth / 2.5) / 2.05,
-                          child: DatePickerExample(
-                            key: receivedate,
-                            label: receiveDate.text.toString(),
-                            text: receiveDate.text.toString(),
-                          ),
-                        ),
-                      ]),
+                  Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+                    SizedBox(
+                      height: screenHeight / 18,
+                      width: (screenWidth / 2.5) / 2.05,
+                      child: DatePickerExample(
+                        key: deliverydate,
+                        label: deliveryDate.text.toString(),
+                        text: deliveryDate.text.toString(),
+                      ),
+                    ),
+                    SizedBox(width: (screenWidth / 2.5) / 39),
+                    SizedBox(
+                      height: screenHeight / 18,
+                      width: (screenWidth / 2.5) / 2.05,
+                      child: DatePickerExample(
+                        key: receivedate,
+                        label: receiveDate.text.toString(),
+                        text: receiveDate.text.toString(),
+                      ),
+                    ),
+                  ]),
+                  // Row(
+                  //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  //     children: [
+                  //       SizedBox(
+                  //         height: screenHeight / 18,
+                  //         width: (screenWidth / 2.5) / 2.05,
+                  //         child: DatePickerExample(
+                  //           key: deliverydate,
+                  //           label: deliveryDate.text.toString(),
+                  //           text: deliveryDate.text.toString(),
+                  //         ),
+                  //       ),
+                  //       SizedBox(
+                  //         height: screenHeight / 18,
+                  //         width: (screenWidth / 2.5) / 2.05,
+                  //         child: DatePickerExample(
+                  //           key: receivedate,
+                  //           label: receiveDate.text.toString(),
+                  //           text: receiveDate.text.toString(),
+                  //         ),
+                  //       ),
+                  //     ]),
                   SizedBox(
                     height: 5,
                   ),
@@ -569,7 +819,9 @@ class CustomerScreen1State extends State<CustomerScreen1> {
                     children: [
                       Container(
                         height: screenHeight / 18,
-                        width: (screenWidth / 2.5) / 1.11,
+                        width: Responsive.isTablet(context)
+                            ? (screenWidth / 2.5) / 1.18
+                            : (screenWidth / 2.5) / 1.11,
                         decoration: BoxDecoration(
                           color: Colors
                               .transparent, // Set your desired background color here
@@ -607,7 +859,7 @@ class CustomerScreen1State extends State<CustomerScreen1> {
                         },
                         child: Container(
                           height: screenHeight / 18,
-                          width: 50,
+                          width: Responsive.isTablet(context) ? 40 : 50,
                           decoration: BoxDecoration(
                             border:
                                 Border.all(color: textBorderColor, width: 1),
