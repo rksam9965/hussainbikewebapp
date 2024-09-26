@@ -357,7 +357,7 @@ class HomePageState extends State<HomePage> {
         ),
         child: SingleChildScrollView(
           // physics: NeverScrollableScrollPhysics(),
-        scrollDirection: Axis.vertical,
+          scrollDirection: Axis.vertical,
           child: Column(
             children: [
               Row(
@@ -608,7 +608,7 @@ class HomePageState extends State<HomePage> {
                           ),
                         ),
                         Expanded(
-                          flex: 8,
+                          flex: 1,
                           child: IndexedStack(
                             index: selectedIndex1,
                             children: [
@@ -831,7 +831,7 @@ class HomePageState extends State<HomePage> {
                           ),
                         ),
                         Expanded(
-                          flex: 8,
+                          flex: 1,
                           child: IndexedStack(
                             index: selectedIndex1,
                             children: [
