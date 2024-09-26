@@ -1097,136 +1097,278 @@ class CustomerScreen1State extends State<CustomerScreen1> {
       builder: (BuildContext context) {
         return Theme(
           data: Theme.of(context).copyWith(dialogBackgroundColor: Colors.white),
-          child: Stack(
-            children: [
-              AlertDialog(
-                iconPadding: EdgeInsets.only(top: 5, right: 5),
-                icon: Align(
-                    alignment: Alignment.centerRight,
-                    child: GestureDetector(
-                      child: Icon(
-                        Icons.close,
-                        size: 18,
-                      ),
-                      onTap: () {
-                        Navigator.of(context).pop(); // Close the dialog
-                      },
-                    )),
-                backgroundColor: appBackGroundColor,
-                surfaceTintColor: Colors.transparent,
-                shape: const RoundedRectangleBorder(
-                  borderRadius: BorderRadius.all(Radius.circular(8.0)),
-                ),
-                title: Text(
-                  "ADD CUSTOMER",
-                  style: TextStyle(
-                      color: floatingButtonColor,
-                      fontSize: 12,
-                      fontWeight: FontWeight.bold),
-                ),
-                content: SingleChildScrollView(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Container(
-                        width: screenWidth / 5,
-                        height: 35,
-                        child: CustomTextField(
-                          filledColor: Colors.grey.shade300,
-                          borderColor: Colors.grey,
-                          lable: 'Name',
-                          controller: name,
-                        ),
-                      ),
-                      SizedBox(height: 4),
-                      Container(
-                        width: screenWidth / 5,
-                        height: 35,
-                        child: CustomTextField(
-                          filledColor: Colors.grey.shade300,
-                          borderColor: Colors.grey,
-                          lable: 'Phone Number',
-                          controller: phoneNumber,
-                        ),
-                      ),
-                      SizedBox(height: 4),
-                      Container(
-                        width: screenWidth / 5,
-                        height: 35,
-                        child: CustomTextField(
-                          filledColor: Colors.grey.shade300,
-                          borderColor: Colors.grey,
-                          lable: 'Email',
-                          controller: email,
-                        ),
-                      ),
-                      SizedBox(height: 4),
-                      Container(
-                        width: screenWidth / 5,
-                        height: 35,
-                        child: CustomTextField(
-                          filledColor: Colors.grey.shade300,
-                          borderColor: Colors.grey,
-                          lable: 'Vat',
-                          controller: vat,
-                        ),
-                      ),
-                      SizedBox(height: 4),
-                      Container(
-                        width: screenWidth / 5,
-                        height: 35,
-                        child: CustomTextField(
-                          filledColor: Colors.grey.shade300,
-                          borderColor: Colors.grey,
-                          lable: 'Address',
-                          controller: address,
-                        ),
-                      ),
-                      SizedBox(height: 10),
-                      GestureDetector(
-                        onTap: () => {Navigator.pop(context)},
-                        child: Container(
-                            width: screenWidth / 5,
-                            height: 35,
-                            decoration: BoxDecoration(
-                              border: Border.all(
-                                color: floatingButtonColor,
-                                // Set your desired border color here
-                                width: 1, // Set the width of the border
-                              ),
-                              color: floatingButtonColor,
-                              borderRadius: BorderRadius.circular(5),
+          child: Responsive.isTablet(context)
+              ? Stack(
+                  children: [
+                    AlertDialog(
+                      iconPadding: EdgeInsets.only(top: 5, right: 5),
+                      icon: Align(
+                          alignment: Alignment.centerRight,
+                          child: GestureDetector(
+                            child: Icon(
+                              Icons.close,
+                              size: 18,
                             ),
-                            child: Center(
-                                child: Text(
-                              "SAVE",
-                              style:
-                                  TextStyle(color: Colors.white, fontSize: 12),
-                            ))),
+                            onTap: () {
+                              Navigator.of(context).pop(); // Close the dialog
+                            },
+                          )),
+                      backgroundColor: appBackGroundColor,
+                      surfaceTintColor: Colors.transparent,
+                      shape: const RoundedRectangleBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(8.0)),
                       ),
-                    ],
-                  ),
+                      title: Text(
+                        "ADD CUSTOMER",
+                        style: TextStyle(
+                            color: floatingButtonColor,
+                            fontSize: 12,
+                            fontWeight: FontWeight.bold),
+                      ),
+                      content: SingleChildScrollView(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Container(
+                              width: screenWidth / 5,
+                              height: 35,
+                              child: CustomTextField(
+                                filledColor: Colors.grey.shade300,
+                                borderColor: Colors.grey,
+                                lable: 'Name',
+                                controller: name,
+                              ),
+                            ),
+                            SizedBox(height: 4),
+                            Container(
+                              width: screenWidth / 5,
+                              height: 35,
+                              child: CustomTextField(
+                                filledColor: Colors.grey.shade300,
+                                borderColor: Colors.grey,
+                                lable: 'Phone Number',
+                                controller: phoneNumber,
+                              ),
+                            ),
+                            SizedBox(height: 4),
+                            Container(
+                              width: screenWidth / 5,
+                              height: 35,
+                              child: CustomTextField(
+                                filledColor: Colors.grey.shade300,
+                                borderColor: Colors.grey,
+                                lable: 'Email',
+                                controller: email,
+                              ),
+                            ),
+                            SizedBox(height: 4),
+                            Container(
+                              width: screenWidth / 5,
+                              height: 35,
+                              child: CustomTextField(
+                                filledColor: Colors.grey.shade300,
+                                borderColor: Colors.grey,
+                                lable: 'Vat',
+                                controller: vat,
+                              ),
+                            ),
+                            SizedBox(height: 4),
+                            Container(
+                              width: screenWidth / 5,
+                              height: 35,
+                              child: CustomTextField(
+                                filledColor: Colors.grey.shade300,
+                                borderColor: Colors.grey,
+                                lable: 'Address',
+                                controller: address,
+                              ),
+                            ),
+                            SizedBox(height: 10),
+                            GestureDetector(
+                              onTap: () => {Navigator.pop(context)},
+                              child: Container(
+                                  width: screenWidth / 5,
+                                  height: 35,
+                                  decoration: BoxDecoration(
+                                    border: Border.all(
+                                      color: floatingButtonColor,
+                                      // Set your desired border color here
+                                      width: 1, // Set the width of the border
+                                    ),
+                                    color: floatingButtonColor,
+                                    borderRadius: BorderRadius.circular(5),
+                                  ),
+                                  child: Center(
+                                      child: Text(
+                                    "SAVE",
+                                    style: TextStyle(
+                                        color: Colors.white, fontSize: 12),
+                                  ))),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                    SizedBox(
+                      child: Container(
+                        // color: appBackGroundColor,
+                        // margin: EdgeInsets.only(
+                        //     left: screenWidth / 1.5, top: screenHeight / 7.95),
+                        child: IconButton(
+                          icon: SvgPicture.asset(
+                            'assets/Icons/cross.svg',
+                            // Update this path to your SVG file
+                            // width: 25,
+                            // height: 25,
+                            color: Colors
+                                .black, // You can change the color if needed
+                          ),
+                          onPressed: () {
+                            Navigator.pop(context);
+                          },
+                        ),
+                      ),
+                    ),
+                  ],
+                )
+              : Stack(
+                  children: [
+                    AlertDialog(
+                      iconPadding: EdgeInsets.only(top: 5, right: 5),
+                      icon: Align(
+                          alignment: Alignment.centerRight,
+                          child: GestureDetector(
+                            child: Icon(
+                              Icons.close,
+                              size: 18,
+                            ),
+                            onTap: () {
+                              Navigator.of(context).pop(); // Close the dialog
+                            },
+                          )),
+                      backgroundColor: appBackGroundColor,
+                      surfaceTintColor: Colors.transparent,
+                      shape: const RoundedRectangleBorder(
+                        borderRadius: BorderRadius.all(Radius.circular(8.0)),
+                      ),
+                      title: Center(
+                        child: Text(
+                          "ADD CUSTOMER",
+                          style: TextStyle(
+                              color: floatingButtonColor,
+                              fontSize: 12,
+                              fontWeight: FontWeight.bold),
+                        ),
+                      ),
+                      content: SingleChildScrollView(
+                        child: Container(
+                          width: screenWidth / 5,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.end,
+                            children: [
+                              SizedBox(
+                                width: screenWidth / 5,
+                                height: 35,
+                                child: CustomTextField(
+                                  filledColor: Colors.grey.shade300,
+                                  borderColor: Colors.grey,
+                                  lable: 'Name',
+                                  controller: name,
+                                ),
+                              ),
+                              SizedBox(height: 4),
+                              Container(
+                                width: screenWidth / 5,
+                                height: 35,
+                                child: CustomTextField(
+                                  filledColor: Colors.grey.shade300,
+                                  borderColor: Colors.grey,
+                                  lable: 'Phone Number',
+                                  controller: phoneNumber,
+                                ),
+                              ),
+                              SizedBox(height: 4),
+                              Container(
+                                width: screenWidth / 5,
+                                height: 35,
+                                child: CustomTextField(
+                                  filledColor: Colors.grey.shade300,
+                                  borderColor: Colors.grey,
+                                  lable: 'Email',
+                                  controller: email,
+                                ),
+                              ),
+                              SizedBox(height: 4),
+                              Container(
+                                width: screenWidth / 5,
+                                height: 35,
+                                child: CustomTextField(
+                                  filledColor: Colors.grey.shade300,
+                                  borderColor: Colors.grey,
+                                  lable: 'Vat',
+                                  controller: vat,
+                                ),
+                              ),
+                              SizedBox(height: 4),
+                              Container(
+                                width: screenWidth / 5,
+                                height: 35,
+                                child: CustomTextField(
+                                  filledColor: Colors.grey.shade300,
+                                  borderColor: Colors.grey,
+                                  lable: 'Address',
+                                  controller: address,
+                                ),
+                              ),
+                              SizedBox(height: 10),
+                              GestureDetector(
+                                onTap: () => {Navigator.pop(context)},
+                                child: Container(
+                                    width: screenWidth / 5,
+                                    height: 35,
+                                    decoration: BoxDecoration(
+                                      border: Border.all(
+                                        color: floatingButtonColor,
+                                        // Set your desired border color here
+                                        width: 1, // Set the width of the border
+                                      ),
+                                      color: floatingButtonColor,
+                                      borderRadius: BorderRadius.circular(5),
+                                    ),
+                                    child: Center(
+                                        child: Text(
+                                      "SAVE",
+                                      style: TextStyle(
+                                          color: Colors.white, fontSize: 12),
+                                    ))),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                    SizedBox(
+                      child: Container(
+                        // color: appBackGroundColor,
+                        // margin: EdgeInsets.only(
+                        //     left: screenWidth / 1.5, top: screenHeight / 7.95),
+                        child: IconButton(
+                          icon: SvgPicture.asset(
+                            'assets/Icons/cross.svg',
+                            // Update this path to your SVG file
+                            // width: 25,
+                            // height: 25,
+                            color: Colors
+                                .black, // You can change the color if needed
+                          ),
+                          onPressed: () {
+                            Navigator.pop(context);
+                          },
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
-              ),
-              Container(
-                // color: appBackGroundColor,
-                // margin: EdgeInsets.only(
-                //     left: screenWidth / 1.5, top: screenHeight / 7.95),
-                child: IconButton(
-                  icon: SvgPicture.asset(
-                    'assets/Icons/cross.svg',
-                    // Update this path to your SVG file
-                    // width: 25,
-                    // height: 25,
-                    color: Colors.black, // You can change the color if needed
-                  ),
-                  onPressed: () {
-                    Navigator.pop(context);
-                  },
-                ),
-              ),
-            ],
-          ),
         );
       },
     );

@@ -17,11 +17,11 @@ class MyApp extends StatelessWidget {
     Widget _defaultHome;
 
     if (deviceType == DeviceType.desktop) {
-      _defaultHome = SignInPage(); // Desktop layout
+      _defaultHome = const SignInPage(); // Desktop layout
     } else if (deviceType == DeviceType.tablet) {
-      _defaultHome = SignInPage(); // Desktop layout
+      _defaultHome = const SignInPage(); // Desktop layout
     } else {
-      _defaultHome = MobileScreen();
+      _defaultHome = const MobileScreen();
     }
     return MaterialApp(
       debugShowCheckedModeBanner: false,
