@@ -60,7 +60,7 @@ class SignInSubmitButtonState extends State<SignInSubmitButton> {
                   style: TextStyle(
                     color: Colors.white,
                     fontSize: widget.fontSize?.toDouble(),
-                    fontWeight: FontWeight.w100,
+                    fontWeight: FontWeight.w200,
                   ),
                 ),
               ),

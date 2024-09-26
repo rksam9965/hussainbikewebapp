@@ -42,7 +42,7 @@ class SignInContentViewState extends State<SignInContentView> {
                 children: [
                   Container(
                     margin: EdgeInsets.only(
-                      top: screenHeight * 0.225,
+                      top: screenHeight * 0.3,
                     ),
                     width: screenWidth * 0.375, // Width of the Container
                     height: 250, // Height of the Container
@@ -149,9 +149,9 @@ class SignInContentViewState extends State<SignInContentView> {
                       ),
                     ),
                   ),
-                  const SizedBox(
-                    height: 10,
-                  ),
+                  // const SizedBox(
+                  //   height: 10,
+                  // ),
                 ],
               ),
             ),

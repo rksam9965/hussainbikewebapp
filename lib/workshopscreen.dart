@@ -359,7 +359,7 @@ class _WorkshopscreenState extends State<Workshopscreen> {
                             GestureDetector(
                               onTap: () => {submitSignature()},
                               child: Container(
-                                  height: screenHeight * 0.08,
+                                  height: 65,
                                   width: screenWidth / 2.5,
                                   decoration: BoxDecoration(
                                     border: Border.all(
@@ -633,8 +633,8 @@ class _WorkshopscreenState extends State<Workshopscreen> {
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             Container(
-                              height: screenHeight * 0.082,
-                              width: screenWidth / 2.3,
+                              height: 50,
+                              width: screenWidth / 2.25,
                               margin: EdgeInsets.only(top: 6, left: 0),
                               decoration: BoxDecoration(
                                 color: Colors.transparent,
@@ -673,8 +673,8 @@ class _WorkshopscreenState extends State<Workshopscreen> {
                             ),
                             Container(
                               margin: EdgeInsets.only(top: 6, left: 0),
-                              height: screenHeight * 0.082,
-                              width: screenWidth / 2.3,
+                              height: 50,
+                              width: screenWidth / 2.25,
                               decoration: BoxDecoration(
                                 // border: Border.all(
                                 //   color:
@@ -692,7 +692,9 @@ class _WorkshopscreenState extends State<Workshopscreen> {
                               ),
                             ),
                           ]),
-                      SizedBox(height: screenHeight * 0.010),
+                      SizedBox(
+                        height: 6,
+                      ),
                       CustomTextField(
                         filledColor: Colors.grey.shade300,
                         borderColor: Colors.grey,
@@ -701,7 +703,7 @@ class _WorkshopscreenState extends State<Workshopscreen> {
                         controller: workshopRemark,
                       ),
                       Container(
-                        height: screenHeight * 0.082,
+                        height: 50,
                         width: screenWidth / 1,
                         margin: EdgeInsets.only(top: 6, left: 0),
                         decoration: BoxDecoration(
@@ -973,12 +975,15 @@ class _WorkshopscreenState extends State<Workshopscreen> {
 
                             // margin: EdgeInsets.only(right: 10, left: 20),
                             // width: screenWidth / 9,
-                            child: Text(
-                              "Part Used",
-                              style: TextStyle(
-                                fontSize: 14,
-                                fontWeight: FontWeight.w300,
-                                color: textFieldTypeTextColor,
+                            child: Align(
+                              alignment: Alignment.center,
+                              child: Text(
+                                "Part Used",
+                                style: TextStyle(
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w300,
+                                  color: textFieldTypeTextColor,
+                                ),
                               ),
                             ),
                           ),
@@ -999,12 +1004,15 @@ class _WorkshopscreenState extends State<Workshopscreen> {
 
                             // margin: EdgeInsets.only(right: 10, left: 20),
                             // width: screenWidth / 9,
-                            child: Text(
-                              "Repair Charge",
-                              style: TextStyle(
-                                fontSize: 14,
-                                fontWeight: FontWeight.w300,
-                                color: textFieldTypeTextColor,
+                            child: Align(
+                              alignment: Alignment.center,
+                              child: Text(
+                                "Repair Charge",
+                                style: TextStyle(
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w300,
+                                  color: textFieldTypeTextColor,
+                                ),
                               ),
                             ),
                           ),
@@ -1023,12 +1031,15 @@ class _WorkshopscreenState extends State<Workshopscreen> {
                           SizedBox(
                             width: screenWidth * 0.12,
                             // margin: EdgeInsets.only(right: 10, left: 20),
-                            child: Text(
-                              "Total",
-                              style: TextStyle(
-                                fontSize: 14,
-                                fontWeight: FontWeight.w300,
-                                color: textFieldTypeTextColor,
+                            child: Align(
+                              alignment: Alignment.center,
+                              child: Text(
+                                "Total",
+                                style: TextStyle(
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w300,
+                                  color: textFieldTypeTextColor,
+                                ),
                               ),
                             ),
                           ),

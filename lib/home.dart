@@ -353,10 +353,11 @@ class HomePageState extends State<HomePage> {
           left: size.width * 0.02,
           right: size.width * 0.02,
           top: size.height * 0.05,
-          bottom: size.height * 0.05,
+          bottom: size.height * 0.01,
         ),
         child: SingleChildScrollView(
-          scrollDirection: Axis.vertical,
+          // physics: NeverScrollableScrollPhysics(),
+        scrollDirection: Axis.vertical,
           child: Column(
             children: [
               Row(
@@ -413,7 +414,7 @@ class HomePageState extends State<HomePage> {
                           // width: screenWidth / 4.067,
                           height: size.height / 0.8125,
                           color: homeScreenBackgroundContainerColor,
-                          margin: const EdgeInsets.only(top: 8),
+                          margin: const EdgeInsets.only(top: 20),
                           child: SingleChildScrollView(
                             child: Column(children: [
                               Visibility(

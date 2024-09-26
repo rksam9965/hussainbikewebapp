@@ -274,13 +274,14 @@ class CustomerScreen1State extends State<CustomerScreen1> {
       height: size.height / 0.8125,
       color: homeScreenContainerColor,
       margin: EdgeInsets.only(
-        top: Responsive.isTablet(context) ? 6 : 30,
+        top: Responsive.isTablet(context) ? 18 : 30,
       ),
       padding: EdgeInsets.only(
         left: screenWidth * 0.02,
         right: screenWidth * 0.02,
       ),
       child: SingleChildScrollView(
+        // physics: NeverScrollableScrollPhysics(),
         child: Responsive.isTablet(context)
             ? Column(
                 children: [
@@ -495,9 +496,9 @@ class CustomerScreen1State extends State<CustomerScreen1> {
                       ),
                     ),
                   ]),
-                  SizedBox(
-                    height: 20,
-                  )
+                  // SizedBox(
+                  //   height: 20,
+                  // )
                 ],
               )
             : Column(
