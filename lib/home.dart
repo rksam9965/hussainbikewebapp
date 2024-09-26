@@ -52,50 +52,7 @@ class HomePageState extends State<HomePage> {
   List<DropdownMenuItem<String>> bikeList = [];
   var selectBikeList = '123';
 
-  List<Item> items = [
-    Item(
-      name: 'Imman',
-      salesman: 'John Doe',
-      phoneCode: '+1',
-      deliverDate: '2024-09-20',
-      receiveDate: '2024-09-24',
-      customer: 'Customer A',
-      mobileNumber: '1234567890',
-      driverDetails: 'Driver A',
-      bikeNumber: 'Bike123',
-      diagnosis: 'Diagnosis A',
-      estimateCharges: '100',
-      address: 'Address A',
-      outstanding: '50',
-      phoneNumber: '0987654321',
-      email: 'email@example.com',
-      vat: 'VAT123',
-      selectDriver: "123",
-      selectCustomer: "Customer 2",
-      selectWeek: "week 2",
-    ),
-    Item(
-      name: 'Imman',
-      salesman: 'John Doe',
-      phoneCode: '+1',
-      deliverDate: '2024-09-20',
-      receiveDate: '2024-09-24',
-      customer: 'Customer A',
-      mobileNumber: '1234567890',
-      driverDetails: 'Driver A',
-      bikeNumber: 'Bike123',
-      diagnosis: 'Diagnosis A',
-      estimateCharges: '100',
-      address: 'Address A',
-      outstanding: '50',
-      phoneNumber: '0987654321',
-      email: 'email@example.com',
-      vat: 'VAT123',
-      selectDriver: "123",
-      selectCustomer: "Customer 2",
-      selectWeek: "week 2",
-    )
-  ];
+  List<Item> items = [];
 
   clearAllControllers() {
     salesman.clear();
