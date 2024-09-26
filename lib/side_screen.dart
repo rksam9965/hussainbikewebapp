@@ -271,7 +271,10 @@ class CustomerScreen1State extends State<CustomerScreen1> {
     var widthSize = screenWidth * 1.5;
     return Container(
       // width: widthSize,
-      height: size.height / 0.8125,
+
+      height: Responsive.isTablet(context)
+          ? size.height / 1.2
+          : size.height / 0.8125,
       color: homeScreenContainerColor,
       margin: EdgeInsets.only(
         top: Responsive.isTablet(context) ? 18 : 30,
@@ -496,9 +499,9 @@ class CustomerScreen1State extends State<CustomerScreen1> {
                       ),
                     ),
                   ]),
-                  // SizedBox(
-                  //   height: 20,
-                  // )
+                  SizedBox(
+                    height: 10,
+                  )
                 ],
               )
             : Column(

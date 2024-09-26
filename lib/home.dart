@@ -412,7 +412,9 @@ class HomePageState extends State<HomePage> {
                         Container(
                           // / 4.067
                           // width: screenWidth / 4.067,
-                          height: size.height / 0.8125,
+                          height: Responsive.isTablet(context)
+                              ? size.height / 1.2
+                              : size.height / 0.8125,
                           color: homeScreenBackgroundContainerColor,
                           margin: const EdgeInsets.only(top: 20),
                           child: SingleChildScrollView(

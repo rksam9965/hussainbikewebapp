@@ -359,7 +359,7 @@ class _WorkshopscreenState extends State<Workshopscreen> {
                             GestureDetector(
                               onTap: () => {submitSignature()},
                               child: Container(
-                                  height: 65,
+                                  height: 60,
                                   width: screenWidth / 2.5,
                                   decoration: BoxDecoration(
                                     border: Border.all(
@@ -512,7 +512,6 @@ class _WorkshopscreenState extends State<Workshopscreen> {
       backgroundColor: workShopBackgroundColor,
       appBar: AppBar(
         automaticallyImplyLeading: false,
-
         backgroundColor: workShopBackgroundColor,
         title: Row(
           mainAxisAlignment: MainAxisAlignment.start,
@@ -544,11 +543,14 @@ class _WorkshopscreenState extends State<Workshopscreen> {
       body: Container(
         width: screenWidth,
         height: screenHeight,
-        margin: EdgeInsets.only(left: 24, top: 0, bottom: 0, right: 24),
+        margin: EdgeInsets.only(
+            left: screenWidth * 0.008,
+            top: 0,
+            bottom: 0,
+            right: screenWidth * 0.008),
         color: workShopContainer,
         child: Container(
           padding: EdgeInsets.all(24),
-          // color: Colors.red,
           child: SingleChildScrollView(
             child: Responsive.isTablet(context)
                 ? Column(
@@ -632,63 +634,60 @@ class _WorkshopscreenState extends State<Workshopscreen> {
                       Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            Container(
-                              height: 50,
-                              width: screenWidth / 2.25,
-                              margin: EdgeInsets.only(top: 6, left: 0),
-                              decoration: BoxDecoration(
-                                color: Colors.transparent,
-                                // Set your desired background color here
-                                border: Border.all(
-                                    color: textBorderColor, width: 1),
-                                // Border color
-                                borderRadius:
-                                    BorderRadius.circular(5), // Rounded corners
-                              ),
-                              child: DropdownButtonFormField<String>(
-                                decoration: const InputDecoration(
-                                  border: InputBorder.none,
-                                  hintText: "Select",
-                                  contentPadding:
-                                      EdgeInsets.symmetric(horizontal: 25),
+                            Expanded(
+                              child: Container(
+                                height: 50,
+                                // width: screenWidth * 0.46,
+                                margin: EdgeInsets.only(top: 6, right: 5),
+                                decoration: BoxDecoration(
+                                  color: Colors.transparent,
+                                  // Set your desired background color here
+                                  border: Border.all(
+                                      color: textBorderColor, width: 1),
+                                  // Border color
+                                  borderRadius: BorderRadius.circular(
+                                      5), // Rounded corners
                                 ),
-                                focusColor: Colors.transparent,
-                                value: selectTechnician,
-                                dropdownColor: Colors.white,
-                                items: technicianList,
-                                // onSaved: (String? itemChosen) {
-                                //   setState(() {
-                                //     selectTechnician = itemChosen!;
-                                //   });
-                                // },
-                                onChanged: (String? value) {
-                                  setState(() {
-                                    selectTechnician = value!;
-                                  });
-                                },
+                                child: DropdownButtonFormField<String>(
+                                  decoration: const InputDecoration(
+                                    border: InputBorder.none,
+                                    hintText: "Select",
+                                    contentPadding:
+                                        EdgeInsets.symmetric(horizontal: 25),
+                                  ),
+                                  focusColor: Colors.transparent,
+                                  value: selectTechnician,
+                                  dropdownColor: Colors.white,
+                                  items: technicianList,
+                                  // onSaved: (String? itemChosen) {
+                                  //   setState(() {
+                                  //     selectTechnician = itemChosen!;
+                                  //   });
+                                  // },
+                                  onChanged: (String? value) {
+                                    setState(() {
+                                      selectTechnician = value!;
+                                    });
+                                  },
+                                ),
                               ),
                             ),
-                            SizedBox(
-                              width: screenWidth * 0.017,
-                            ),
-                            Container(
-                              margin: EdgeInsets.only(top: 6, left: 0),
-                              height: 50,
-                              width: screenWidth / 2.25,
-                              decoration: BoxDecoration(
-                                // border: Border.all(
-                                //   color:
-                                //       textFieldTypeTextColor, // Set the border color
-                                //   width: 1, // Set the border width
-                                // ),
-                                // color: redBorder.withOpacity(
-                                //     0.1), // Background color with 50% opacity
-                                borderRadius: BorderRadius.circular(
-                                    8), // Optional: Rounded corners
-                              ),
-                              child: DatePickerExample(
-                                key: textFieldsDate1,
-                                label: "Delivery Date",
+                            // Expanded(
+                            //   child: SizedBox(child: Text("1")),
+                            // ),
+                            Expanded(
+                              child: Container(
+                                margin: EdgeInsets.only(top: 6, left: 5),
+                                height: 50,
+                                // width: screenWidth * 0.46,
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(
+                                      8), // Optional: Rounded corners
+                                ),
+                                child: DatePickerExample(
+                                  key: textFieldsDate1,
+                                  label: "Delivery Date",
+                                ),
                               ),
                             ),
                           ]),
