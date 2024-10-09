@@ -1,7 +1,9 @@
+import 'dart:convert';
 import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:hussainbikewebapp/responsive.dart';
 import 'package:hussainbikewebapp/utils/colors.dart';
+import 'package:hussainbikewebapp/utils/custom_alert.dart';
 import 'package:hussainbikewebapp/widget/bottom_gesture_button.dart';
 import 'package:hussainbikewebapp/widget/date_picker.dart';
 import 'package:hussainbikewebapp/workshopscreen.dart';
@@ -9,7 +11,11 @@ import 'package:hussainbikewebapp/workshopscreen.dart';
 import 'Textfield.dart';
 import 'package:flutter_svg/svg.dart';
 
+import 'api_services/api_repo.dart';
+import 'datamodule/cancel.dart';
+import 'datamodule/create_job.dart';
 import 'datamodule/dummyData.dart';
+import 'datamodule/get_status.dart';
 
 class CustomerScreen1 extends StatefulWidget {
   int? selectedIndex;
@@ -17,24 +23,23 @@ class CustomerScreen1 extends StatefulWidget {
   String? salesman;
   Function(BuildContext context, bool? text, int? index)? showPopup;
   int? index;
-  List<Item>? items;
-  final ValueChanged<Item> onEdit;
   Function? ontab;
   Function? ontab1;
+  List<Job>? items;
+  Future<void> Function()? getOngoings;
 
-  CustomerScreen1({
-    super.key,
-    this.passingIndex,
-    this.selectedIndex,
-    required,
-    this.showPopup,
-    this.salesman,
-    this.items,
-    this.index,
-    required this.onEdit,
-    this.ontab,
-    this.ontab1,
-  });
+  CustomerScreen1(
+      {super.key,
+      this.passingIndex,
+      this.selectedIndex,
+      required,
+      this.showPopup,
+      this.salesman,
+      this.index,
+      this.ontab,
+      this.ontab1,
+      this.items,
+      this.getOngoings});
 
   @override
   State<CustomerScreen1> createState() => CustomerScreen1State();
@@ -82,38 +87,50 @@ class CustomerScreen1State extends State<CustomerScreen1> {
 
   bool? display = true;
   bool? disable = true;
+  List setOngoingList = [];
 
   @override
   void initState() {
-    name.text = widget.items![widget.index!].name.toString();
-    vat.text = widget.items![widget.index!].vat.toString();
-    phoneNumber.text = widget.items![widget.index!].phoneNumber.toString();
-    email.text = widget.items![widget.index!].email.toString();
-    address.text = widget.items![widget.index!].address.toString();
-    salesman.text = widget.items![widget.index!].salesman.toString();
+    // Future.delayed(Duration(milliseconds: 0), () {
+    //   if (widget.selectedIndex == 0) {
+    //     getOngoing();
+    //   } else if (widget.selectedIndex == 1) {
+    //     getOngoing();
+    //   } else {}
+    // });
+    setEditValue();
+    workerFilter();
+    customerFilter();
+    bikeNumberFilter();
+    super.initState();
+  }
+
+  setEditValue() {
+    // name.text = widget.items![widget.index!]..toString();
+    // vat.text = widget.items![widget.index!].vat.toString();
+    // phoneNumber.text = widget.items![widget.index!].phoneNumber.toString();
+    // email.text = widget.items![widget.index!].email.toString();
+    // address.text = widget.items![widget.index!].address.toString();
+    salesman.text = widget.items![widget.index!].salesMan.toString();
     phoneCode.text = widget.items![widget.index!].phoneCode.toString();
     customer.text = widget.items![widget.index!].customer.toString();
     mobileNumber.text = widget.items![widget.index!].mobileNumber.toString();
-    deliveryDate.text = widget.items![widget.index!].deliverDate.toString();
+    deliveryDate.text = widget.items![widget.index!].deliveryDate.toString();
     receiveDate.text = widget.items![widget.index!].receiveDate.toString();
     driverDetails.text = widget.items![widget.index!].driverDetails.toString();
     bikeNumber.text = widget.items![widget.index!].bikeNumber.toString();
     diagnosis.text = widget.items![widget.index!].diagnosis.toString();
     estimateCharges.text =
-        widget.items![widget.index!].estimateCharges.toString();
+        widget.items![widget.index!].estimatedCharges.toString();
     outstanding.text = widget.items![widget.index!].outstanding.toString();
-    address.text = widget.items![widget.index!].address.toString();
-    selectWeek = widget.items![widget.index!].selectWeek.toString();
-    receivedate.currentState?.formattedDate =
+    // address.text = widget.items![widget.index!].ad.toString();
+    // selectWeek = widget.items![widget.index!].week.toString();
+    textFieldsDate2.currentState?.formattedDate =
         widget.items![widget.index!].receiveDate.toString();
-    deliverydate.currentState?.formattedDate =
-        widget.items![widget.index!].receiveDate.toString();
-    selectCustomer = widget.items![widget.index!].selectCustomer.toString();
-    selectBikeList = widget.items![widget.index!].bikeNumber.toString();
-    workerFilter();
-    customerFilter();
-    bikeNumberFilter();
-    super.initState();
+    textFieldsDate1.currentState?.formattedDate =
+        widget.items![widget.index!].deliveryDate.toString();
+    // selectCustomer = widget.items![widget.index!].customer.toString();
+    // selectBikeList = widget.items![widget.index!].bikeNumber.toString();
   }
 
   customerFilter() {
@@ -263,15 +280,77 @@ class CustomerScreen1State extends State<CustomerScreen1> {
     );
   }
 
+  updateJobEntry(String? id) async {
+    var jsonData = postData1();
+    displayProgress(context);
+    updateJobEntries(jsonData, id!).then((CreateJobModule createJob) {
+      hideProgress(context);
+      if (createJob.message == "Job updated successfully") {
+        debugPrint('SUCCESS...');
+        Navigator.pop(context);
+        widget.getOngoings!();
+        // setState(() {
+        //   widget.items?.clear();
+        // });
+      } else {
+        displayAlert(context, GlobalKey(), createJob.message ?? '');
+      }
+    }).catchError((error, stackTrace) {
+      hideProgress(context);
+      debugPrint(error.toString());
+      debugPrint(stackTrace.toString());
+      displayAlert(context, GlobalKey(), error.toString());
+    });
+  }
+
+  String postData1() {
+    var pageDetails = {
+      "salesMan": salesman.text,
+      "phoneCode": phoneCode.text,
+      "receiveDate": textFieldsDate2.currentState?.formattedDate.toString(),
+      "deliveryDate": textFieldsDate1.currentState?.formattedDate.toString(),
+      "customer": selectCustomer,
+      "mobileNumber": mobileNumber.text,
+      "driverDetails": driverDetails.text,
+      "bikeNumber": selectBikeList.toString(),
+      "diagnosis": diagnosis.text,
+      "estimatedCharges": estimateCharges.text,
+      "outstanding": outstanding.text.toString()
+    };
+    return json.encode(pageDetails);
+  }
+
+  cancelEntries(String? id) async {
+    var jsonData = postCancelData(id);
+    displayProgress(context);
+    jobCancel(jsonData).then((JobResponseCancel jobResponseCancel) {
+      hideProgress(context);
+      if (jobResponseCancel.status == "success") {
+        debugPrint('SUCCESS...');
+        widget.ontab!();
+        // widget.getOngoings!();
+      } else {
+        displayAlert(context, GlobalKey(), jobResponseCancel.message ?? '');
+      }
+    }).catchError((error, stackTrace) {
+      hideProgress(context);
+      debugPrint(error.toString());
+      debugPrint(stackTrace.toString());
+      displayAlert(context, GlobalKey(), error.toString());
+    });
+  }
+
+  String postCancelData(String? id) {
+    var pageDetails = {"id": id};
+    return json.encode(pageDetails);
+  }
+
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     var screenWidth = MediaQuery.of(context).size.width;
     var screenHeight = MediaQuery.of(context).size.height;
-    var widthSize = screenWidth * 1.5;
     return Container(
-      // width: widthSize,
-
       height: Responsive.isTablet(context)
           ? size.height / 1.2
           : size.height / 0.8125,
@@ -304,7 +383,8 @@ class CustomerScreen1State extends State<CustomerScreen1> {
                               : true,
                           child: GestureDetector(
                             onTap: () {
-                              showPopup(context, false, widget.index);
+                              showPopup(
+                                  context, false, widget.index, widget.items);
                             },
                             child: Container(
                               margin: EdgeInsets.only(
@@ -342,7 +422,7 @@ class CustomerScreen1State extends State<CustomerScreen1> {
                               disable: disable,
                               key: receivedate,
                               label: "Receive Date",
-                              text: receiveDate.text.toString(),
+                              text: formatDate(receiveDate.text.toString()),
                             ),
                           ),
                           SizedBox(
@@ -355,7 +435,7 @@ class CustomerScreen1State extends State<CustomerScreen1> {
                               disable: disable,
                               key: deliverydate,
                               label: "Delivery Date",
-                              text: deliveryDate.text.toString(),
+                              text: formatDate(deliveryDate.text.toString()),
                             ),
                           ),
                         ]),
@@ -451,7 +531,8 @@ class CustomerScreen1State extends State<CustomerScreen1> {
                         flex: 2,
                         child: BottomGestureButton(
                           cancel: cancel,
-                          navigationFunction1: widget.ontab,
+                          navigationFunction1: cancelEntries(
+                              widget.items![widget.index!].id.toString()),
                           text: "CANCEL",
                           textColor: Colors.black,
                           color: Colors.transparent,
@@ -522,7 +603,8 @@ class CustomerScreen1State extends State<CustomerScreen1> {
                               : true,
                           child: GestureDetector(
                             onTap: () {
-                              showPopup(context, false, widget.index);
+                              showPopup(
+                                  context, false, widget.index!, widget.items);
                             },
                             child: Container(
                               margin: EdgeInsets.only(
@@ -557,7 +639,7 @@ class CustomerScreen1State extends State<CustomerScreen1> {
                             disable: disable,
                             key: receivedate,
                             label: "Receive Date",
-                            text: receiveDate.text.toString(),
+                            text: formatDate(receiveDate.text.toString()),
                           ),
                         ),
                         SizedBox(
@@ -566,7 +648,7 @@ class CustomerScreen1State extends State<CustomerScreen1> {
                             disable: disable,
                             key: deliverydate,
                             label: "Delivery Date",
-                            text: deliveryDate.text.toString(),
+                            text: formatDate(deliveryDate.text.toString()),
                           ),
                         ),
                       ]),
@@ -659,7 +741,9 @@ class CustomerScreen1State extends State<CustomerScreen1> {
                           visible: widget.selectedIndex == 0 ? true : false,
                           child: BottomGestureButton(
                             cancel: cancel,
-                            navigationFunction1: widget.ontab,
+                            navigationFunction1: () => cancelEntries(widget
+                                .items![widget.index!].id
+                                .toString()), // Wrap in a function
                             text: "CANCEL",
                             textColor: Colors.black,
                             color: Colors.transparent,
@@ -718,7 +802,7 @@ class CustomerScreen1State extends State<CustomerScreen1> {
     );
   }
 
-  showPopup(BuildContext context, bool? text, int? index) {
+  showPopup(BuildContext context, bool? text, int? index, List<Job>? items) {
     // text == false ? editInitialSetupFunction(index) : clearAllControllers();
     final Size size = MediaQuery.of(context).size;
     var screenWidth = MediaQuery.of(context).size.width;
@@ -777,22 +861,44 @@ class CustomerScreen1State extends State<CustomerScreen1> {
                       height: screenHeight / 18,
                       width: (screenWidth / 2.5) / 2.05,
                       child: DatePickerExample(
-                        key: deliverydate,
-                        label: deliveryDate.text.toString(),
-                        text: deliveryDate.text.toString(),
-                      ),
+                          // ddd: false,
+                          text: textFieldsDate2.currentState?.formattedDate
+                              .toString(),
+                          label: formatDate(receiveDate.text.toString()),
+                          key: textFieldsDate2),
                     ),
                     SizedBox(width: (screenWidth / 2.5) / 39),
                     SizedBox(
                       height: screenHeight / 18,
                       width: (screenWidth / 2.5) / 2.05,
                       child: DatePickerExample(
-                        key: receivedate,
-                        label: receiveDate.text.toString(),
-                        text: receiveDate.text.toString(),
-                      ),
+                          text: textFieldsDate1.currentState?.formattedDate
+                              .toString(),
+                          label: formatDate(deliveryDate.text.toString()),
+                          key: textFieldsDate1),
                     ),
                   ]),
+                  // Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+                  //   SizedBox(
+                  //     height: screenHeight / 18,
+                  //     width: (screenWidth / 2.5) / 2.05,
+                  //     child: DatePickerExample(
+                  //       key: deliverydate,
+                  //       label: deliveryDate.text.toString(),
+                  //      text: deliveryDate.text.toString(),
+                  //     ),
+                  //   ),
+                  //   SizedBox(width: (screenWidth / 2.5) / 39),
+                  //   SizedBox(
+                  //     height: screenHeight / 18,
+                  //     width: (screenWidth / 2.5) / 2.05,
+                  //     child: DatePickerExample(
+                  //       key: receivedate,
+                  //       label: receiveDate.text.toString(),
+                  //       text: receiveDate.text.toString(),
+                  //     ),
+                  //   ),
+                  // ]),
                   // Row(
                   //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   //     children: [
@@ -977,7 +1083,7 @@ class CustomerScreen1State extends State<CustomerScreen1> {
                                     "Pickup Location", // Button text
                                     style: TextStyle(
                                       color: redBorder, // Text color
-                                      fontSize: 13, // Text size
+                                      fontSize: 14, // Text size
                                       fontWeight: FontWeight.bold, // Text style
                                     ),
                                   ),
@@ -991,7 +1097,6 @@ class CustomerScreen1State extends State<CustomerScreen1> {
                     height: 5,
                   ),
                   SizedBox(
-                    // height: screenHeight/6,
                     width: screenWidth / 2.5,
                     child: CustomTextField(
                       filledColor: Colors.grey.shade300,
@@ -1035,28 +1140,7 @@ class CustomerScreen1State extends State<CustomerScreen1> {
                     height: screenHeight / 18,
                     child: GestureDetector(
                       onTap: () {
-                        Item updatedItem = Item(
-                          salesman: salesman.text,
-                          name: name.text,
-                          deliverDate: deliverydate.currentState?.formattedDate
-                              .toString(),
-                          phoneCode: phoneCode.text,
-                          customer: selectCustomer.toString(),
-                          mobileNumber: mobileNumber.text,
-                          receiveDate: receivedate.currentState?.formattedDate
-                              .toString(),
-                          driverDetails: driverDetails.text,
-                          bikeNumber: selectBikeList.toString(),
-                          diagnosis: diagnosis.text,
-                          estimateCharges: estimateCharges.text,
-                          outstanding: outstanding.text,
-                          address: address.text,
-                          phoneNumber: phoneNumber.text,
-                          email: email.text,
-                          vat: vat.text,
-                        );
-                        widget.onEdit(updatedItem);
-                        Navigator.of(context).pop();
+                        updateJobEntry(items?[index!].id.toString());
                       },
                       child: Container(
                           height: 50,
@@ -1372,6 +1456,13 @@ class CustomerScreen1State extends State<CustomerScreen1> {
         );
       },
     );
+  }
+
+  String formatDate(String dateString) {
+    DateTime dateTime = DateTime.parse(dateString);
+    return "${dateTime.year.toString().padLeft(4, '0')}-"
+        "${dateTime.month.toString().padLeft(2, '0')}-"
+        "${dateTime.day.toString().padLeft(2, '0')}";
   }
 
   bool? signatureDisplay = false;

@@ -13,19 +13,20 @@ class BottomGestureButton extends StatefulWidget {
   Function()? navigationFunction;
   bool? cancel;
   bool? topbarbutton;
-  Function? navigationFunction1;
-  BottomGestureButton(
-      {super.key,
-      this.text,
-      this.color,
-      this.textColor,
-      this.selectedIndexRow,
-      this.popup,
-      this.navigationFunction,
-      this.topbarbutton,
-      this.addDatum,
-      this.cancel,
-      this.navigationFunction1});
+  Function()? navigationFunction1;
+  BottomGestureButton({
+    super.key,
+    this.text,
+    this.color,
+    this.textColor,
+    this.selectedIndexRow,
+    this.popup,
+    this.navigationFunction,
+    this.topbarbutton,
+    this.addDatum,
+    this.cancel,
+    this.navigationFunction1,
+  });
 
   @override
   State<BottomGestureButton> createState() => _BottomGestureButtonState();

@@ -42,8 +42,8 @@ class SignInSubmitButtonState extends State<SignInSubmitButton> {
         Column(
           children: [
             GestureDetector(
-              onTap: () => {
-                Navigator.pushNamed(context, '/homePage'),
+              onTap: () async {
+                await Navigator.pushNamed(context, '/homePage');
               },
               child: Container(
                 height: 50,

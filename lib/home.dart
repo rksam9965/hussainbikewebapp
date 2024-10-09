@@ -1,14 +1,21 @@
+import 'dart:convert';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:hussainbikewebapp/responsive.dart';
 import 'package:hussainbikewebapp/utils/colors.dart';
+import 'package:hussainbikewebapp/utils/custom_alert.dart';
 import 'package:hussainbikewebapp/widget/RowGesturebutton.dart';
 import 'package:hussainbikewebapp/widget/date_picker.dart';
 import 'package:hussainbikewebapp/widget/gesturebutton.dart';
 import 'package:flutter_svg/svg.dart';
 import 'Textfield.dart';
+import 'api_services/api_repo.dart';
+import 'datamodule/create_job.dart';
+
+import 'datamodule/get_status.dart';
 import 'side_screen.dart';
-import 'datamodule/dummyData.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -52,7 +59,18 @@ class HomePageState extends State<HomePage> {
   List<DropdownMenuItem<String>> bikeList = [];
   var selectBikeList = '123';
 
-  List<Item> items = [];
+  @override
+  void initState() {
+    SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersive);
+    Future.delayed(Duration(milliseconds: 0), () {
+      getOngoings();
+    });
+    customerFilter();
+    bikeNumberFilter();
+    workerFilter();
+
+    super.initState();
+  }
 
   clearAllControllers() {
     salesman.clear();
@@ -73,6 +91,14 @@ class HomePageState extends State<HomePage> {
   }
 
   _onButtonTap(int index) {
+    if (index == 0) {
+      debugPrint("imman");
+      getOngoings();
+    } else if (index == 1) {
+      getOngoings();
+    } else if (index == 2) {
+      getCancelledDatum();
+    }
     setState(() {
       selectedIndex = index;
     });
@@ -88,6 +114,7 @@ class HomePageState extends State<HomePage> {
     setState(() {
       passingIndex = 2;
     });
+    getCancelledDatum();
   }
 
   onTab1() {
@@ -103,41 +130,6 @@ class HomePageState extends State<HomePage> {
     setState(() {
       selectedIndex1 = index;
     });
-  }
-
-  @override
-  void initState() {
-    workerFilter();
-    customerFilter();
-    bikeNumberFilter();
-    super.initState();
-  }
-
-  addDatumFunction() {
-    setState(() {
-      items.add(Item(
-        name: name.text,
-        deliverDate: textFieldsDate1.currentState!.formattedDate,
-        receiveDate: textFieldsDate2.currentState?.formattedDate,
-        salesman: salesman.text,
-        selectWeek: selectWeek.toString(),
-        selectCustomer: selectCustomer.toString(),
-        selectDriver: selectBikeList.toString(),
-        phoneCode: phoneCode.text,
-        customer: selectCustomer.toString(),
-        mobileNumber: mobileNumber.text,
-        driverDetails: driverDetails.text,
-        bikeNumber: selectBikeList.toString(),
-        diagnosis: diagnosis.text,
-        estimateCharges: estimateCharges.text,
-        outstanding: outstanding.text,
-        address: address.text,
-        phoneNumber: phoneNumber.text,
-        email: email.text,
-        vat: vat.text,
-      ));
-    });
-    Navigator.of(context).pop();
   }
 
   customerFilter() {
@@ -173,7 +165,7 @@ class HomePageState extends State<HomePage> {
     );
     customerList.add(
       DropdownMenuItem(
-        value: "customer 3",
+        value: "customer 53",
         child: Center(
           child: Text(
             "customer 3",
@@ -191,7 +183,7 @@ class HomePageState extends State<HomePage> {
   bikeNumberFilter() {
     bikeList.add(
       DropdownMenuItem(
-        value: "5645",
+        value: "55",
         child: Center(
           child: Text(
             '5645',
@@ -292,6 +284,112 @@ class HomePageState extends State<HomePage> {
   }
 
   bool? isBack = true;
+
+  Future<void> createJobEntry() async {
+    var jsonData = postData();
+    displayProgress(context);
+    createJobEntries(jsonData).then((CreateJobModule createJob) {
+      hideProgress(context);
+      if (createJob.message == "Job created successfully") {
+        debugPrint('SUCCESS...');
+        getOngoings();
+        Navigator.pop(context);
+      } else {
+        displayAlert(context, GlobalKey(), createJob.message ?? '');
+      }
+    }).catchError((error, stackTrace) {
+      hideProgress(context);
+      debugPrint(error.toString());
+      debugPrint(stackTrace.toString());
+      displayAlert(context, GlobalKey(), error.toString());
+    });
+  }
+
+  List<Job> statusList0 = [];
+  List<Job> statusList1 = [];
+  List<Job> statusList2 = [];
+
+  Future<void> getOngoings() async {
+    displayProgress(context);
+    statusList0.clear();
+    getOngoing().then((JobsResponse jobsResponse) {
+      hideProgress(context);
+      if (jobsResponse.data!.jobs!.isNotEmpty) {
+        if (jobsResponse.status == "success") {
+          debugPrint('SUCCESS...');
+          setState(() {
+            statusList0 = jobsResponse.data!.jobs!;
+          });
+        } else {
+          displayAlert(context, GlobalKey(), jobsResponse.status ?? '');
+        }
+      }
+    }).catchError((error, stackTrace) {
+      hideProgress(context);
+      debugPrint(error.toString());
+      debugPrint(stackTrace.toString());
+      displayAlert(context, GlobalKey(), error.toString());
+    });
+  }
+
+  getCancelledDatum() async {
+    displayProgress(context);
+    statusList0.clear();
+    getCancelled().then((JobsResponse jobsResponse) {
+      hideProgress(context);
+      if (jobsResponse.status == "success") {
+        debugPrint('SUCCESS...');
+        setState(() {
+          statusList0 = jobsResponse.data!.jobs!;
+        });
+      } else {
+        displayAlert(context, GlobalKey(), jobsResponse.status ?? '');
+      }
+    }).catchError((error, stackTrace) {
+      hideProgress(context);
+      debugPrint(error.toString());
+      debugPrint(stackTrace.toString());
+      displayAlert(context, GlobalKey(), error.toString());
+    });
+  }
+
+  Future<void> getComplete() async {
+    var jsonData = postData();
+    displayProgress(context);
+    createJobEntries(jsonData).then((CreateJobModule createJob) {
+      hideProgress(context);
+      if (createJob.message == "Job created successfully") {
+        debugPrint('SUCCESS...');
+        Navigator.pop(context);
+        setState(() {});
+      } else {
+        displayAlert(context, GlobalKey(), createJob.message ?? '');
+      }
+    }).catchError((error, stackTrace) {
+      hideProgress(context);
+      debugPrint(error.toString());
+      debugPrint(stackTrace.toString());
+      displayAlert(context, GlobalKey(), error.toString());
+    });
+  }
+
+  String postData() {
+    var pageDetails = {
+      "salesMan": salesman.text,
+      "phoneCode": phoneCode.text,
+      "receiveDate": textFieldsDate2.currentState?.formattedDate.toString(),
+      "deliveryDate": textFieldsDate1.currentState?.formattedDate.toString(),
+      "customer": selectCustomer,
+      "mobileNumber": mobileNumber.text,
+      "driverDetails": driverDetails.text,
+      "bikeNumber": selectBikeList,
+      "diagnosis": diagnosis.text,
+      "estimatedCharges": estimateCharges.text,
+      "outstanding": outstanding.text
+    };
+    return json.encode(pageDetails);
+  }
+
   @override
   Widget build(BuildContext context) {
     List<Widget> screens = [];
@@ -303,561 +401,575 @@ class HomePageState extends State<HomePage> {
     String path = "assets/Icons/addicon.svg";
     String path1 = "assets/Icons/backIcon.svg";
 
-    return Scaffold(
-      backgroundColor: appBackGroundColor,
-      body: Responsive.isMobile(context)
-          ? const Center(
-              child: Text("This web page only supports tablet and desktop"))
-          : Padding(
-              padding: EdgeInsets.only(
-                left: size.width * 0.02,
-                right: size.width * 0.02,
-                top: size.height * 0.05,
-                bottom: size.height * 0.01,
-              ),
-              child: SingleChildScrollView(
-                // physics: NeverScrollableScrollPhysics(),
-                scrollDirection: Axis.vertical,
-                child: Column(
-                  children: [
-                    Row(
-                      children: [
-                        Container(
-                          height: 50,
-                          width: size.width / 1.4,
-                          child: _buildSearchController(),
-                        ),
-                        SizedBox(width: size.width * 0.01),
-                        GestureButton(
-                            imagePath: path,
-                            showPopup: showPopup,
-                            selectCustomer: selectCustomer),
-                        SizedBox(width: size.width * 0.01),
-                        GestureButton(
-                            popUp: popUp, imagePath: path1, logout: isBack),
-                      ],
-                    ),
-                    SizedBox(height: 20),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        CustomButton(
-                          Maxwidth: size.width / 3.2,
-                          text: "ON-GOING",
-                          isSelected: selectedIndex == 0,
-                          borderColor: redButtonColor,
-                          onTap: () => _onButtonTap(0),
-                        ),
-                        SizedBox(width: size.width * 0.01),
-                        CustomButton(
-                          Maxwidth: size.width / 3.2,
-                          text: "COMPLETED",
-                          newchange: selectedIndex,
-                          isSelected: selectedIndex == 1,
-                          borderColor: redButtonColor,
-                          onTap: () => _onButtonTap(1),
-                        ),
-                        SizedBox(width: size.width * 0.01),
-                        CustomButton(
-                          Maxwidth: size.width / 3.2,
-                          text: "CANCELLED",
-                          isSelected: selectedIndex == 2,
-                          borderColor: redButtonColor,
-                          onTap: () => _onButtonTap(2),
-                        ),
-                      ],
-                    ),
-                    Responsive.isTablet(context)
-                        ? Row(
-                            children: [
-                              Container(
-                                // / 4.067
-                                // width: screenWidth / 4.067,
-                                height: Responsive.isTablet(context)
-                                    ? size.height / 1.2
-                                    : size.height / 0.8125,
-                                color: homeScreenBackgroundContainerColor,
-                                margin: const EdgeInsets.only(top: 20),
-                                child: SingleChildScrollView(
-                                  child: Column(children: [
-                                    Visibility(
-                                      visible: selectedIndex == 0 ||
-                                              selectedIndex == 2
-                                          ? false
-                                          : true,
-                                      child: Padding(
-                                        padding: EdgeInsets.only(
-                                            left: size.width / 88),
-                                        child: Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.spaceBetween,
-                                            children: [
-                                              GestureDetector(
-                                                  onTap: () async {},
-                                                  child: Container(
-                                                    width: 45,
-                                                    height: 30,
-                                                    margin: EdgeInsets.only(
-                                                        top: 6, left: 0),
-                                                    // padding: EdgeInsets.all(10),
-                                                    decoration: BoxDecoration(
-                                                      color: Colors.white,
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              0),
-                                                    ),
-                                                    child: const Center(
-                                                      child: Text(
-                                                        'Week',
-                                                        style: TextStyle(
-                                                            color: Colors.black,
-                                                            fontSize: 12),
+    return WillPopScope(
+      onWillPop: () async {
+        return true;
+      },
+      child: Scaffold(
+        backgroundColor: appBackGroundColor,
+        body: Responsive.isMobile(context)
+            ? const Center(
+                child: Text("This web page only supports tablet and desktop"))
+            : Padding(
+                padding: EdgeInsets.only(
+                  left: size.width * 0.02,
+                  right: size.width * 0.02,
+                  top: size.height * 0.05,
+                  bottom: size.height * 0.01,
+                ),
+                child: SingleChildScrollView(
+                  // physics: NeverScrollableScrollPhysics(),
+                  scrollDirection: Axis.vertical,
+                  child: Column(
+                    children: [
+                      Row(
+                        children: [
+                          Container(
+                            height: 50,
+                            width: size.width / 1.4,
+                            child: _buildSearchController(),
+                          ),
+                          SizedBox(width: size.width * 0.01),
+                          GestureButton(
+                              imagePath: path,
+                              showPopup: showPopup,
+                              selectCustomer: selectCustomer),
+                          SizedBox(width: size.width * 0.01),
+                          GestureButton(
+                              popUp: popUp, imagePath: path1, logout: isBack),
+                        ],
+                      ),
+                      SizedBox(height: 20),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          CustomButton(
+                            Maxwidth: size.width / 3.2,
+                            text: "ON-GOING",
+                            isSelected: selectedIndex == 0,
+                            borderColor: redButtonColor,
+                            // getOngoings: getOngoings,
+                            onTap: () => _onButtonTap(0),
+                          ),
+                          SizedBox(width: size.width * 0.01),
+                          CustomButton(
+                            Maxwidth: size.width / 3.2,
+                            text: "COMPLETED",
+                            newchange: selectedIndex,
+                            isSelected: selectedIndex == 1,
+                            borderColor: redButtonColor,
+                            onTap: () => _onButtonTap(1),
+                          ),
+                          SizedBox(width: size.width * 0.01),
+                          CustomButton(
+                            Maxwidth: size.width / 3.2,
+                            text: "CANCELLED",
+                            isSelected: selectedIndex == 2,
+                            borderColor: redButtonColor,
+                            onTap: () => _onButtonTap(2),
+                          ),
+                        ],
+                      ),
+                      Responsive.isTablet(context)
+                          ? Row(
+                              children: [
+                                Container(
+                                  // / 4.067
+                                  // width: screenWidth / 4.067,
+                                  height: Responsive.isTablet(context)
+                                      ? size.height / 1.2
+                                      : size.height / 0.8125,
+                                  color: homeScreenBackgroundContainerColor,
+                                  margin: const EdgeInsets.only(top: 20),
+                                  child: SingleChildScrollView(
+                                    child: Column(children: [
+                                      Visibility(
+                                        visible: selectedIndex == 0 ||
+                                                selectedIndex == 2
+                                            ? false
+                                            : true,
+                                        child: Padding(
+                                          padding: EdgeInsets.only(
+                                              left: size.width / 88),
+                                          child: Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment
+                                                      .spaceBetween,
+                                              children: [
+                                                GestureDetector(
+                                                    onTap: () async {},
+                                                    child: Container(
+                                                      width: 45,
+                                                      height: 30,
+                                                      margin: EdgeInsets.only(
+                                                          top: 6, left: 0),
+                                                      // padding: EdgeInsets.all(10),
+                                                      decoration: BoxDecoration(
+                                                        color: Colors.white,
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(0),
                                                       ),
-                                                    ),
-                                                  )),
-                                              GestureDetector(
-                                                  onTap: () async {},
-                                                  child: Container(
-                                                    width: 45,
-                                                    height: 30,
-                                                    margin: EdgeInsets.only(
-                                                        top: 6, left: 0),
-                                                    // padding: EdgeInsets.all(10),
-                                                    decoration: BoxDecoration(
-                                                      color: Colors.white,
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              0),
-                                                    ),
-                                                    child: const Center(
-                                                      child: Text(
-                                                        'Month',
-                                                        style: TextStyle(
-                                                            color: Colors.black,
-                                                            fontSize: 12),
-                                                      ),
-                                                    ),
-                                                  )),
-                                              GestureDetector(
-                                                  onTap: () async {},
-                                                  child: Container(
-                                                    width: 45,
-                                                    height: 30,
-                                                    margin: EdgeInsets.only(
-                                                        top: 6, left: 0),
-                                                    // padding: EdgeInsets.all(10),
-                                                    decoration: BoxDecoration(
-                                                      color: Colors.white,
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              0),
-                                                    ),
-                                                    child: const Center(
-                                                      child: Text(
-                                                        'Year',
-                                                        style: TextStyle(
-                                                            color: Colors.black,
-                                                            fontSize: 12),
-                                                      ),
-                                                    ),
-                                                  )),
-                                              Container(
-                                                  width: 80,
-                                                  margin: EdgeInsets.only(
-                                                      top: 6, left: 0),
-                                                  decoration: BoxDecoration(
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            25), // Set border radius here
-                                                  ),
-                                                  height: 30,
-                                                  child: DropdownButton(
-                                                    dropdownColor:
-                                                        Colors.grey.shade100,
-                                                    hint: const Center(
-                                                      child: Text(
-                                                        "Select",
-                                                        style: TextStyle(
-                                                          fontSize: 11,
-                                                          color: Colors.black,
-                                                          fontWeight: FontWeight
-                                                              .normal, // Set font weight to bold
+                                                      child: const Center(
+                                                        child: Text(
+                                                          'Week',
+                                                          style: TextStyle(
+                                                              color:
+                                                                  Colors.black,
+                                                              fontSize: 12),
                                                         ),
                                                       ),
+                                                    )),
+                                                GestureDetector(
+                                                    onTap: () async {},
+                                                    child: Container(
+                                                      width: 45,
+                                                      height: 30,
+                                                      margin: EdgeInsets.only(
+                                                          top: 6, left: 0),
+                                                      // padding: EdgeInsets.all(10),
+                                                      decoration: BoxDecoration(
+                                                        color: Colors.white,
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(0),
+                                                      ),
+                                                      child: const Center(
+                                                        child: Text(
+                                                          'Month',
+                                                          style: TextStyle(
+                                                              color:
+                                                                  Colors.black,
+                                                              fontSize: 12),
+                                                        ),
+                                                      ),
+                                                    )),
+                                                GestureDetector(
+                                                    onTap: () async {},
+                                                    child: Container(
+                                                      width: 45,
+                                                      height: 30,
+                                                      margin: EdgeInsets.only(
+                                                          top: 6, left: 0),
+                                                      // padding: EdgeInsets.all(10),
+                                                      decoration: BoxDecoration(
+                                                        color: Colors.white,
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(0),
+                                                      ),
+                                                      child: const Center(
+                                                        child: Text(
+                                                          'Year',
+                                                          style: TextStyle(
+                                                              color:
+                                                                  Colors.black,
+                                                              fontSize: 12),
+                                                        ),
+                                                      ),
+                                                    )),
+                                                Container(
+                                                    width: 80,
+                                                    margin: EdgeInsets.only(
+                                                        top: 6, left: 0),
+                                                    decoration: BoxDecoration(
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              25), // Set border radius here
                                                     ),
-                                                    underline: SizedBox(),
-                                                    isExpanded: true,
-                                                    items: weekList,
-                                                    onChanged:
-                                                        (String? itemChosen) {
-                                                      setState(() {
-                                                        selectWeek =
-                                                            itemChosen!;
-                                                      });
-                                                    },
-                                                    value: selectWeek,
-                                                  )),
-                                              GestureDetector(
-                                                onTap: () {},
-                                                child: Container(
-                                                  margin: EdgeInsets.only(
-                                                      top: 6, left: 0),
-                                                  child: Image.asset(
-                                                    'assets/Icons/excell.png', // Replace with your PNG asset path
-                                                    width:
-                                                        50.0, // Set width as needed
-                                                    height:
-                                                        50.0, // Set height as needed
+                                                    height: 30,
+                                                    child: DropdownButton(
+                                                      dropdownColor:
+                                                          Colors.grey.shade100,
+                                                      hint: const Center(
+                                                        child: Text(
+                                                          "Select",
+                                                          style: TextStyle(
+                                                            fontSize: 11,
+                                                            color: Colors.black,
+                                                            fontWeight: FontWeight
+                                                                .normal, // Set font weight to bold
+                                                          ),
+                                                        ),
+                                                      ),
+                                                      underline: SizedBox(),
+                                                      isExpanded: true,
+                                                      items: weekList,
+                                                      onChanged:
+                                                          (String? itemChosen) {
+                                                        setState(() {
+                                                          selectWeek =
+                                                              itemChosen!;
+                                                        });
+                                                      },
+                                                      value: selectWeek,
+                                                    )),
+                                                GestureDetector(
+                                                  onTap: () {},
+                                                  child: Container(
+                                                    margin: EdgeInsets.only(
+                                                        top: 6, left: 0),
+                                                    child: Image.asset(
+                                                      'assets/Icons/excell.png', // Replace with your PNG asset path
+                                                      width:
+                                                          50.0, // Set width as needed
+                                                      height:
+                                                          50.0, // Set height as needed
+                                                    ),
                                                   ),
                                                 ),
-                                              ),
-                                            ]),
-                                      ),
-                                    ),
-                                    for (int index = 0;
-                                        index < items.length;
-                                        index++)
-                                      InkWell(
-                                        onDoubleTap: () {
-                                          // deleteItem(index);
-                                        },
-                                        onTap: () => _onMenuItemTap(index),
-                                        child: AnimatedContainer(
-                                          // Use AnimatedContainer for smooth transitions
-                                          duration: const Duration(
-                                              milliseconds:
-                                                  300), // Duration for animation
-                                          width: selectedIndex1 == index
-                                              ? 270
-                                              : 250, // Increase width for selected container
-                                          margin: EdgeInsets.only(
-                                            left: 10,
-                                            top: index == 0
-                                                ? (selectedIndex == 0 ||
-                                                        selectedIndex == 2
-                                                    ? 80
-                                                    : 30)
-                                                : 10,
-                                            bottom: 10,
-                                            right: selectedIndex1 == index
-                                                ? 0
-                                                : 8, // Right margin 0 for selected index
-                                          ),
-                                          height: screenHeight / 5,
-                                          decoration: BoxDecoration(
-                                            color: selectedIndex1 == index
-                                                ? homeScreenContainerColor
-                                                : newContainerColor,
-                                            borderRadius:
-                                                BorderRadius.circular(8),
-                                          ),
-                                          child: Column(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.center,
-                                            children: [
-                                              Center(
-                                                  child: Text(items[index]
-                                                      .name
-                                                      .toString())),
-                                              SizedBox(height: 5),
-                                              Center(
-                                                  child: Text(
-                                                      'Job Order ${index + 1}')),
-                                              SizedBox(height: 5),
-                                              Center(
-                                                  child: Text(items[index]
-                                                      .receiveDate
-                                                      .toString())),
-                                              SizedBox(height: 5),
-                                              Center(
-                                                  child: Text(items[index]
-                                                      .deliverDate
-                                                      .toString())),
-                                            ],
-                                          ),
+                                              ]),
                                         ),
                                       ),
-                                  ]),
-                                ),
-                              ),
-                              Expanded(
-                                flex: 1,
-                                child: IndexedStack(
-                                  index: selectedIndex1,
-                                  children: [
-                                    for (int i = 0; i < items.length; i++)
-                                      CustomerScreen1(
-                                          ontab: onTab2,
-                                          ontab1: onTab1,
-                                          showPopup: showPopup,
-                                          items: items,
-                                          index: i,
-                                          onEdit: (updatedItem) {
-                                            _editItem(i, updatedItem);
+                                      for (int index = 0;
+                                          index < statusList0.length;
+                                          index++)
+                                        InkWell(
+                                          onDoubleTap: () {
+                                            // deleteItem(index);
                                           },
-                                          selectedIndex: selectedIndex)
-                                  ],
-                                ),
-                              ),
-                            ],
-                          )
-                        : Row(
-                            children: [
-                              Container(
-                                // / 4.067
-                                // width: screenWidth / 4.067,
-                                height: size.height / 0.8125,
-                                color: homeScreenBackgroundContainerColor,
-                                margin: const EdgeInsets.only(top: 30),
-                                child: SingleChildScrollView(
-                                  child: Column(children: [
-                                    Visibility(
-                                      visible: selectedIndex == 0 ||
-                                              selectedIndex == 2
-                                          ? false
-                                          : true,
-                                      child: Padding(
-                                        padding: EdgeInsets.only(
-                                            left: size.width / 88),
-                                        child: Row(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.spaceBetween,
-                                            children: [
-                                              GestureDetector(
-                                                  onTap: () async {},
-                                                  child: Container(
-                                                    width: 50,
-                                                    height: 30,
-                                                    margin: EdgeInsets.only(
-                                                        top: 6, left: 0),
-                                                    // padding: EdgeInsets.all(10),
-                                                    decoration: BoxDecoration(
-                                                      color: Colors.white,
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              0),
-                                                    ),
-                                                    child: const Center(
-                                                      child: Text(
-                                                        'Week',
-                                                        style: TextStyle(
-                                                            color: Colors.black,
-                                                            fontSize: 12),
-                                                      ),
-                                                    ),
-                                                  )),
-                                              GestureDetector(
-                                                  onTap: () async {},
-                                                  child: Container(
-                                                    width: 50,
-                                                    height: 30,
-                                                    margin: EdgeInsets.only(
-                                                        top: 6, left: 0),
-                                                    // padding: EdgeInsets.all(10),
-                                                    decoration: BoxDecoration(
-                                                      color: Colors.white,
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              0),
-                                                    ),
-                                                    child: const Center(
-                                                      child: Text(
-                                                        'Month',
-                                                        style: TextStyle(
-                                                            color: Colors.black,
-                                                            fontSize: 12),
-                                                      ),
-                                                    ),
-                                                  )),
-                                              GestureDetector(
-                                                  onTap: () async {},
-                                                  child: Container(
-                                                    width: 50,
-                                                    height: 30,
-                                                    margin: EdgeInsets.only(
-                                                        top: 6, left: 0),
-                                                    // padding: EdgeInsets.all(10),
-                                                    decoration: BoxDecoration(
-                                                      color: Colors.white,
-                                                      borderRadius:
-                                                          BorderRadius.circular(
-                                                              0),
-                                                    ),
-                                                    child: const Center(
-                                                      child: Text(
-                                                        'Year',
-                                                        style: TextStyle(
-                                                            color: Colors.black,
-                                                            fontSize: 12),
-                                                      ),
-                                                    ),
-                                                  )),
-                                              Container(
-                                                  width: 100,
-                                                  margin: EdgeInsets.only(
-                                                      top: 6, left: 0),
-                                                  decoration: BoxDecoration(
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            25), // Set border radius here
-                                                  ),
-                                                  height: 30,
-                                                  child: DropdownButton(
-                                                    dropdownColor:
-                                                        Colors.grey.shade100,
-                                                    hint: const Center(
-                                                      child: Text(
-                                                        "Select",
-                                                        style: TextStyle(
-                                                          fontSize: 11,
-                                                          color: Colors.black,
-                                                          fontWeight: FontWeight
-                                                              .normal, // Set font weight to bold
-                                                        ),
-                                                      ),
-                                                    ),
-                                                    underline: SizedBox(),
-                                                    isExpanded: true,
-                                                    items: weekList,
-                                                    onChanged:
-                                                        (String? itemChosen) {
-                                                      setState(() {
-                                                        selectWeek =
-                                                            itemChosen!;
-                                                      });
-                                                    },
-                                                    value: selectWeek,
-                                                  )),
-                                              GestureDetector(
-                                                onTap: () {},
-                                                child: Container(
-                                                  margin: EdgeInsets.only(
-                                                      top: 6, left: 0),
-                                                  child: Image.asset(
-                                                    'assets/Icons/excell.png', // Replace with your PNG asset path
-                                                    width:
-                                                        50.0, // Set width as needed
-                                                    height:
-                                                        50.0, // Set height as needed
-                                                  ),
-                                                ),
-                                              ),
-                                            ]),
-                                      ),
-                                    ),
-                                    for (int index = 0;
-                                        index < items.length;
-                                        index++)
-                                      InkWell(
-                                        onDoubleTap: () {
-                                          // deleteItem(index);
-                                        },
-                                        onTap: () => _onMenuItemTap(index),
-                                        child: AnimatedContainer(
-                                          // Use AnimatedContainer for smooth transitions
-                                          duration: const Duration(
-                                              milliseconds:
-                                                  300), // Duration for animation
-                                          width: selectedIndex1 == index
-                                              ? 320
-                                              : 300, // Increase width for selected container
-                                          margin: EdgeInsets.only(
-                                            left: 10,
-                                            top: index == 0
-                                                ? (selectedIndex == 0 ||
-                                                        selectedIndex == 2
-                                                    ? 80
-                                                    : 30)
-                                                : 10,
-                                            bottom: 10,
-                                            right: selectedIndex1 == index
-                                                ? 0
-                                                : 8, // Right margin 0 for selected index
-                                          ),
-                                          height: screenHeight / 4.5,
-                                          decoration: BoxDecoration(
-                                            color: selectedIndex1 == index
-                                                ? homeScreenContainerColor
-                                                : newContainerColor,
-                                            borderRadius:
-                                                BorderRadius.circular(8),
-                                          ),
-                                          child: Container(
-                                            margin:
-                                                const EdgeInsets.only(top: 20),
+                                          onTap: () => _onMenuItemTap(index),
+                                          child: AnimatedContainer(
+                                            // Use AnimatedContainer for smooth transitions
+                                            duration: const Duration(
+                                                milliseconds:
+                                                    300), // Duration for animation
+                                            width: selectedIndex1 == index
+                                                ? 270
+                                                : 250, // Increase width for selected container
+                                            margin: EdgeInsets.only(
+                                              left: 10,
+                                              top: index == 0
+                                                  ? (selectedIndex == 0 ||
+                                                          selectedIndex == 2
+                                                      ? 80
+                                                      : 30)
+                                                  : 10,
+                                              bottom: 10,
+                                              right: selectedIndex1 == index
+                                                  ? 0
+                                                  : 8, // Right margin 0 for selected index
+                                            ),
+                                            height: screenHeight / 5,
+                                            decoration: BoxDecoration(
+                                              color: selectedIndex1 == index
+                                                  ? homeScreenContainerColor
+                                                  : newContainerColor,
+                                              borderRadius:
+                                                  BorderRadius.circular(8),
+                                            ),
                                             child: Column(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.center,
                                               children: [
                                                 Center(
-                                                    child: Text(items[index]
-                                                        .name
-                                                        .toString())),
+                                                    child: Text(
+                                                        statusList0[index]
+                                                            .customer
+                                                            .toString())),
                                                 SizedBox(height: 5),
                                                 Center(
                                                     child: Text(
                                                         'Job Order ${index + 1}')),
                                                 SizedBox(height: 5),
                                                 Center(
-                                                    child: Text(items[index]
-                                                        .receiveDate
+                                                    child: Text(DateTime.parse(
+                                                            statusList0[index]
+                                                                .receiveDate
+                                                                .toString())
                                                         .toString())),
                                                 SizedBox(height: 5),
                                                 Center(
-                                                    child: Text(items[index]
-                                                        .deliverDate
+                                                    child: Text(DateTime.parse(
+                                                            statusList0[index]
+                                                                .deliveryDate
+                                                                .toString())
                                                         .toString())),
                                               ],
                                             ),
                                           ),
                                         ),
+                                    ]),
+                                  ),
+                                ),
+                                Expanded(
+                                  flex: 1,
+                                  child: IndexedStack(
+                                    index: selectedIndex1,
+                                    children: [
+                                      for (int i = 0;
+                                          i < statusList0.length;
+                                          i++)
+                                        CustomerScreen1(
+                                            ontab: onTab2,
+                                            ontab1: onTab1,
+                                            showPopup: showPopup,
+                                            items: statusList0,
+                                            selectedIndex: selectedIndex)
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            )
+                          : Row(
+                              children: [
+                                Container(
+                                  // / 4.067
+                                  // width: screenWidth / 4.067,
+                                  height: size.height / 0.8125,
+                                  color: homeScreenBackgroundContainerColor,
+                                  margin: const EdgeInsets.only(top: 30),
+                                  child: SingleChildScrollView(
+                                    child: Column(children: [
+                                      Visibility(
+                                        visible: selectedIndex == 0 ||
+                                                selectedIndex == 2
+                                            ? false
+                                            : true,
+                                        child: Padding(
+                                          padding: EdgeInsets.only(
+                                              left: size.width / 88),
+                                          child: Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment
+                                                      .spaceBetween,
+                                              children: [
+                                                GestureDetector(
+                                                    onTap: () async {},
+                                                    child: Container(
+                                                      width: 50,
+                                                      height: 30,
+                                                      margin: EdgeInsets.only(
+                                                          top: 6, left: 0),
+                                                      // padding: EdgeInsets.all(10),
+                                                      decoration: BoxDecoration(
+                                                        color: Colors.white,
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(0),
+                                                      ),
+                                                      child: const Center(
+                                                        child: Text(
+                                                          'Week',
+                                                          style: TextStyle(
+                                                              color:
+                                                                  Colors.black,
+                                                              fontSize: 12),
+                                                        ),
+                                                      ),
+                                                    )),
+                                                GestureDetector(
+                                                    onTap: () async {},
+                                                    child: Container(
+                                                      width: 50,
+                                                      height: 30,
+                                                      margin: EdgeInsets.only(
+                                                          top: 6, left: 0),
+                                                      // padding: EdgeInsets.all(10),
+                                                      decoration: BoxDecoration(
+                                                        color: Colors.white,
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(0),
+                                                      ),
+                                                      child: const Center(
+                                                        child: Text(
+                                                          'Month',
+                                                          style: TextStyle(
+                                                              color:
+                                                                  Colors.black,
+                                                              fontSize: 12),
+                                                        ),
+                                                      ),
+                                                    )),
+                                                GestureDetector(
+                                                    onTap: () async {},
+                                                    child: Container(
+                                                      width: 50,
+                                                      height: 30,
+                                                      margin: EdgeInsets.only(
+                                                          top: 6, left: 0),
+                                                      // padding: EdgeInsets.all(10),
+                                                      decoration: BoxDecoration(
+                                                        color: Colors.white,
+                                                        borderRadius:
+                                                            BorderRadius
+                                                                .circular(0),
+                                                      ),
+                                                      child: const Center(
+                                                        child: Text(
+                                                          'Year',
+                                                          style: TextStyle(
+                                                              color:
+                                                                  Colors.black,
+                                                              fontSize: 12),
+                                                        ),
+                                                      ),
+                                                    )),
+                                                Container(
+                                                    width: 100,
+                                                    margin: EdgeInsets.only(
+                                                        top: 6, left: 0),
+                                                    decoration: BoxDecoration(
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              25), // Set border radius here
+                                                    ),
+                                                    height: 30,
+                                                    child: DropdownButton(
+                                                      dropdownColor:
+                                                          Colors.grey.shade100,
+                                                      hint: const Center(
+                                                        child: Text(
+                                                          "Select",
+                                                          style: TextStyle(
+                                                            fontSize: 11,
+                                                            color: Colors.black,
+                                                            fontWeight: FontWeight
+                                                                .normal, // Set font weight to bold
+                                                          ),
+                                                        ),
+                                                      ),
+                                                      underline: SizedBox(),
+                                                      isExpanded: true,
+                                                      items: weekList,
+                                                      onChanged:
+                                                          (String? itemChosen) {
+                                                        setState(() {
+                                                          selectWeek =
+                                                              itemChosen!;
+                                                        });
+                                                      },
+                                                      value: selectWeek,
+                                                    )),
+                                                GestureDetector(
+                                                  onTap: () {},
+                                                  child: Container(
+                                                    margin: EdgeInsets.only(
+                                                        top: 6, left: 0),
+                                                    child: Image.asset(
+                                                      'assets/Icons/excell.png', // Replace with your PNG asset path
+                                                      width:
+                                                          50.0, // Set width as needed
+                                                      height:
+                                                          50.0, // Set height as needed
+                                                    ),
+                                                  ),
+                                                ),
+                                              ]),
+                                        ),
                                       ),
-                                  ]),
-                                ),
-                              ),
-                              Expanded(
-                                flex: 1,
-                                child: IndexedStack(
-                                  index: selectedIndex1,
-                                  children: [
-                                    for (int i = 0; i < items.length; i++)
-                                      CustomerScreen1(
-                                          ontab: onTab2,
-                                          ontab1: onTab1,
-                                          // selectedIndex1:selectedIndex1
-                                          showPopup: showPopup,
-                                          items: items,
-                                          index: i,
-                                          onEdit: (updatedItem) {
-                                            _editItem(i, updatedItem);
+                                      for (int index = 0;
+                                          index < statusList0.length;
+                                          index++)
+                                        InkWell(
+                                          onDoubleTap: () {
+                                            // deleteItem(index);
                                           },
-                                          selectedIndex: selectedIndex)
-                                  ],
+                                          onTap: () => _onMenuItemTap(index),
+                                          child: AnimatedContainer(
+                                            // Use AnimatedContainer for smooth transitions
+                                            duration: const Duration(
+                                                milliseconds:
+                                                    300), // Duration for animation
+                                            width: selectedIndex1 == index
+                                                ? 320
+                                                : 300, // Increase width for selected container
+                                            margin: EdgeInsets.only(
+                                              left: 10,
+                                              top: index == 0
+                                                  ? (selectedIndex == 0 ||
+                                                          selectedIndex == 2
+                                                      ? 80
+                                                      : 30)
+                                                  : 10,
+                                              bottom: 10,
+                                              right: selectedIndex1 == index
+                                                  ? 0
+                                                  : 8, // Right margin 0 for selected index
+                                            ),
+                                            height: screenHeight / 4.5,
+                                            decoration: BoxDecoration(
+                                              color: selectedIndex1 == index
+                                                  ? homeScreenContainerColor
+                                                  : newContainerColor,
+                                              borderRadius:
+                                                  BorderRadius.circular(8),
+                                            ),
+                                            child: Container(
+                                              margin: const EdgeInsets.only(
+                                                  top: 20),
+                                              child: Column(
+                                                children: [
+                                                  Center(
+                                                      child: Text(
+                                                          statusList0[index]
+                                                              .customer
+                                                              .toString())),
+                                                  SizedBox(height: 5),
+                                                  Center(
+                                                      child: Text(
+                                                          'Job Order ${index + 1}')),
+                                                  SizedBox(height: 5),
+                                                  Center(
+                                                      child: Text(
+                                                          "${formatDate(statusList0[index].deliveryDate.toString())}")),
+                                                  SizedBox(height: 5),
+                                                  Center(
+                                                      child: Text(
+                                                          "${formatDate(statusList0[index].receiveDate.toString())}")),
+                                                ],
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                    ]),
+                                  ),
                                 ),
-                              ),
-                            ],
-                          ),
-                  ],
+                                Expanded(
+                                    flex: 1,
+                                    child: IndexedStack(
+                                      index: selectedIndex1,
+                                      children: [
+                                        for (int i = 0;
+                                            i < statusList0.length;
+                                            i++)
+                                          CustomerScreen1(
+                                              getOngoings: getOngoings,
+                                              ontab: onTab2,
+                                              ontab1: onTab1,
+                                              showPopup: showPopup,
+                                              items: statusList0,
+                                              index: i,
+                                              selectedIndex: selectedIndex)
+                                      ],
+                                    )),
+                              ],
+                            )
+                    ],
+                  ),
                 ),
               ),
-            ),
+      ),
     );
   }
 
-  kk(updatedItem) {
-    for (int i = 0; i < items.length; i++) {
-      _editItem(i, updatedItem);
-    }
-  }
+  // kk(updatedItem) {
+  //   for (int i = 0; i < items.length; i++) {
+  //     _editItem(i, updatedItem);
+  //   }
+  // }
 
-  void _editItem(int index, Item newItem) {
-    setState(() {
-      items[index] = newItem; // Update the item in the list
-    });
-  }
+  // void _editItem(int index, Item newItem) {
+  //   setState(() {
+  //     items[index] = newItem; // Update the item in the list
+  //   });
+  // }
 
   editInitialSetupFunction(int? index) {
     setState(() {
       // for (int i = 0; i < items.length; i++) {
-      salesman.text = items[index!].salesman.toString();
+      // salesman.text = items[index!].salesman.toString();
       // phoneCode.text = items[i].phoneCode.toString();
       // customer.text = items[i].customer.toString();
       // mobileNumber.text = items[i].mobileNumber.toString();
@@ -875,7 +987,7 @@ class HomePageState extends State<HomePage> {
   editUpdate(int? index) {
     setState(() {
       // for (int i = 0; i < items.length; i++) {
-      items[index!].salesman = salesman.text;
+      // items[index!].salesman = salesman.text;
       // phoneCode.text = items[i].phoneCode.toString();
       // customer.text = items[i].customer.toString();
       // mobileNumber.text = items[i].mobileNumber.toString();
@@ -942,7 +1054,7 @@ class HomePageState extends State<HomePage> {
 
   deleteItem(int index) {
     setState(() {
-      items.removeAt(index);
+      // items.removeAt(index);
     });
   }
 
@@ -1247,7 +1359,7 @@ class HomePageState extends State<HomePage> {
                           height: screenHeight / 18,
                           child: GestureDetector(
                             onTap: () {
-                              addDatumFunction();
+                              createJobEntry();
                             },
                             child: Container(
                                 height: 50,
@@ -1325,8 +1437,6 @@ class HomePageState extends State<HomePage> {
                           children: [
                             Container(
                               height: screenHeight / 18,
-                              // width: screenWidth / 2.5,
-
                               width: (screenWidth / 2.5) / 1.11,
                               decoration: BoxDecoration(
                                 color: Colors
@@ -1540,7 +1650,8 @@ class HomePageState extends State<HomePage> {
                           height: screenHeight / 18,
                           child: GestureDetector(
                             onTap: () {
-                              addDatumFunction();
+                              createJobEntry();
+                              // getOngoings();
                             },
                             child: Container(
                                 height: 50,
@@ -1844,6 +1955,13 @@ class HomePageState extends State<HomePage> {
         );
       },
     );
+  }
+
+  String formatDate(String dateString) {
+    DateTime dateTime = DateTime.parse(dateString);
+    return "${dateTime.year.toString().padLeft(4, '0')}-"
+        "${dateTime.month.toString().padLeft(2, '0')}-"
+        "${dateTime.day.toString().padLeft(2, '0')}";
   }
 
   Widget TextFieldFunction(String label, TextEditingController controller) {
